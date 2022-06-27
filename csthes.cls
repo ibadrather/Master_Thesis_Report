@@ -200,7 +200,7 @@
 \newcommand*{\facultyat@en}{at}
 \newcommand*{\faculty@en}{Carl Zeiss AG, Jena, \\ 
                         Corporate Research Department (CRT) \\ 
-                        and \\  
+                        and \\
                         Department of Mechatronics\\ 
                         Naturwissenschaftlich-Technische Fakult\"at}
 \newcommand*{\facultyof@en}{of}

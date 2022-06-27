@@ -1,21 +1,41 @@
 \chapter{State of Research} \label{chapter_two}
 
-In this chapter you introduce all necessary theoretical and empirical findings, formalism's or algorithms on which your own work is based. Name the chapter such that the scope is clearly characterized, e.g., {\em Generalizing Patterns with Grammar Inference Methods}. Use a section for each aspect you are covering.
+For our application we will get the best results if we use both IMU and Gyroscope readings. 
+Also a huge challenge for us is that we need accuracy in the range of 1/10th of a mm. So we need to develop algorithms/techniques which can give us this precision.
 
-\section{Formal Grammars}
-
-Some content.
-\subsection{Second Subsection}
+\section{Various Digital Image Stabilisation Techniques}
 
 Some content.
-\subsubsection{Second Subsubsection}
+\subsection{Image Feature Tracking}
+Stabilisation by tracking good features in an video feed.
 
-Some content.
-\section{Application Domain: Sequences of facial expressions}
+\subsection{Optical Flow}
+Estimating poses using Optical Flow.
 
-Some content.
-\section{Swarm Algorithms}
+\subsection{Gyro EIS}
+Using Gyroscope values to correct for rotations while recording
 
-Some content.
+\subsection{IMU Stabilisation}
+Using both Accelerometer and Gyroscope readings for DIS.
+
+\section{Position Estimation}
+
+For stabilisation to be accurate we need to estimate the position and orientation or change in it with high accuracy. So, we will need to use modern techniques for that like ANNs. We will also discuss shortcomings of classical algorithms.
+
+\subsection{Kalman Filtering}
+Position and Orientation estimation while using a Kalman Filter for IMU readings.
+
+\subsection{RIDI}
+Robust Inertial Double Integration
+
+\subsection{RoNIN}
+Robust Neural Inertial Navigation
+
+\subsection{TLIO}
+Tight Learned Inertial Odometry
+
+\subsection{CTIN}
+Robust Contextual Transformer Network for Inertial Navigation
+
 
 
