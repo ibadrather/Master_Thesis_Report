@@ -1,36 +1,39 @@
-\chapter{Research Methodology} \label{chapter_three}
+\chapter{State of Research} \label{chapter_three}
 
-What I am doing and how am I doing it. Various techniques, mathematics, approaches and why them. Benefits of each approach and their drawbacks.
+For our application we will get the best results if we use both IMU and Gyroscope readings. 
+Also a huge challenge for us is that we need accuracy in the range of 1/10th of a mm. So we need to develop algorithms/techniques which can give us this precision.
 
-\section{Dataset Information}
-\begin{itemize}
-\item Background of Dataset: How it was generated. 
-\item What was the thought process. 
-\item What kind of data we have.
-\item Robustness of technique of Data Collection/Generation.
-\end{itemize}
-\section{Structuring of Data}
-Data can be used in multiple ways. Explaining each way and why is it a good or a bad idea. What to put in networks. Sticking to realism.
+\section{Various Digital Image Stabilisation Techniques}
 
-\section{Mathematics for stabilisation}
-Here we will see what exactly we are trying to find out: (R, T)
+Some content.
+\subsection{Image Feature Tracking}
+Stabilisation by tracking good features in an video feed.
 
-\section{Training and Testing of Various Neural Networks}
-We will use various Neural Network types and Architectures.
+\subsection{Optical Flow}
+Estimating poses using Optical Flow.
 
-\begin{itemize}
-\item CNNs
-\item RNNs: LSTMS 
-\item Transformers
-\item Temporal Fusion Transformers
-\item CNNs
-\item Resnets
-\end{itemize}
+\subsection{Gyro EIS}
+Using Gyroscope values to correct for rotations while recording
 
-\section{Image Stabilisation based on the Techniques Used}
-We will see the Stabilized Videos and discuss about how they look visually to different people.
+\subsection{IMU Stabilisation}
+Using both Accelerometer and Gyroscope readings for DIS.
 
-\section{Model Inference on Hardware: Google Coral AI Edge TPU Chip}
-We will test all the trained models and check their inference speeds to see if the models can be used in real-time application. We will need for it to make inferences at at-least 60Hz.
+\section{Pose Estimation}
+For stabilisation to be accurate we need to estimate the position and orientation or change in it with high accuracy. So, we will need to use modern techniques for that like ANNs. We will also discuss shortcomings of classical algorithms.
+
+\subsection{Kalman Filtering}
+Position and Orientation estimation while using a Kalman Filter for IMU readings.
+
+\subsection{RIDI}
+Robust Inertial Double Integration
+
+\subsection{RoNIN}
+Robust Neural Inertial Navigation
+
+\subsection{TLIO}
+Tight Learned Inertial Odometry
+
+\subsection{Transformers}
+Transformers for pose estimation.
 
 

@@ -38,7 +38,8 @@ using an \\ Inertial Measurement Unit}
 \author{Ibad Rather \matr{1532894}}
 
 \degree{MS Mechatronics}
-\supervisor{\\Dr. Steffen Urban \\Prof. Dr. Ing. Bhaskar Choubey}% most likely
+\supervisor{\\Company: Dr. Steffen Urban \\
+            University: Prof. Dr. Ing. Bhaskar Choubey}% most likely
 
 % Start of content
 \begin{document}
@@ -46,28 +47,10 @@ using an \\ Inertial Measurement Unit}
 \maketitle
 % Give a short summary of your thesis
 \begin{abstract}
-Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of
-classical “post-processing” image stabilization where image features are extracted and tracked over
-time [1] or modern deep learning based methods using dense optical flow [2], they need to perform
-the motion estimation on constrained hardware systems and with very high frame-rates (>120 fps).
-Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter
-distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are
-reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the
-field-of-view of the lenses large (> 50°). In addition, estimating translational motion is a difficult
-challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong
-drift and leads to large errors even over short time periods (< 1s). 
+Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high frame-rates (>120 fps).
+Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large (> 50°). In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods (< 1s). 
 
-This thesis should investigate and develop an image stabilization method for an oscillating camera. The
-setup is depicted in Figure 1. The camera has a small field-of-view and hence small translational
-movements along the viewing direction will be visible and need to be stabilized. The camera is coupled
-with an IMU and attached to a linear stage, that will mimic the oscillating movements. The camera
-records a monitor or a static target. An additional goal is the implementation, optimization and testing
-of the proposed algorithm on a modern embedded chip.
-
-
-
-Figure 1 Hardware setup
-
+This thesis should investigate and develop an image stabilization method for an oscillating camera. The camera has a small field-of-view and hence small translational movements along the viewing direction will be visible and need to be stabilized. The camera is coupled with an IMU and attached to a linear stage, that will mimic the oscillating movements. The camera records a monitor or a static target. An additional goal is the implementation, optimization and testing of the proposed algorithm on a modern embedded chip.
 
 \end{abstract}
 % Set the table of contents
@@ -92,14 +75,18 @@ Figure 1 Hardware setup
 
 % 1. Chapter: ''Introduction''
 \input{chapters/chapter_1}
-% 2. Chapter: ''State of Research''
+% 2. Chapter: ''Fundamentals Blocks''
 \input{chapters/chapter_2}
-% 3. Chapter: ''Methods''
+% 3. Chapter: ''State of Research''
 \input{chapters/chapter_3}
-% 4. Chapter: ''Realisation and Evaluation''
+% 4. Chapter: ''Methods''
 \input{chapters/chapter_4}
-% 5. Chapter: ''Conclusions and Future Work''
+% 5. Chapter: ''Realisation and Evaluation''
 \input{chapters/chapter_5}
+% 6. Chapter: ''Realisation and Evaluation''
+\input{chapters/chapter_6}
+% 7. Chapter: ''Conclusions and Future Work''
+\input{chapters/chapter_7}
 
 % The chapters Introduction and Conclusions have NO sections
 % For the other chapters:
