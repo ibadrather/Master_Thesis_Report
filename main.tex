@@ -47,8 +47,9 @@ using an \\ Inertial Measurement Unit}
 \maketitle
 % Give a short summary of your thesis
 \begin{abstract}
-Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high frame-rates (>120 fps).
-Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large (> 50°). In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods (< 1s). 
+Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high  frame-rates $(\geq 120 fps).$ 
+
+Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large $(\geq 50^\circ)$. In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods $(\leq 1s)$. 
 
 This thesis should investigate and develop an image stabilization method for an oscillating camera. The camera has a small field-of-view and hence small translational movements along the viewing direction will be visible and need to be stabilized. The camera is coupled with an IMU and attached to a linear stage, that will mimic the oscillating movements. The camera records a monitor or a static target. An additional goal is the implementation, optimization and testing of the proposed algorithm on a modern embedded chip.
 
@@ -62,14 +63,6 @@ This thesis should investigate and develop an image stabilization method for an 
 
 % Start the main work (handles page numbering etc.)
 \mainmatter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  Place your content here           %
-%                                    %
-%  or even better:                   %
-%  use \input{chapters/chaptername}  %
-%  for each chapter!                 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % While writing your thesis it is advisable to only load the chapter you are currently working on. It decreases the compile time. 
 
@@ -123,12 +116,12 @@ C                                                                               
 Some example image:
 \begin{figure}[hb!]
 \centering
-  \includegraphics[width=0.5\textwidth]{images/uni_siegen_logo}
+  \includegraphics[width=0.5\textwidth]{images/logos/uni_siegen_logo}
     \caption{The logo of your university}
 \end{figure}
 
 % Make the references section
-\bibliography{mybib} % According to the name of your bib file
+\bibliography{references} % According to the name of your bib file
 
 % Start the appendix
 \appendix

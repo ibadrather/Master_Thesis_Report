@@ -114,7 +114,7 @@
   \let \footnote \thanks
   \begin{center}
     \vspace*{.02\textheight}
-    \includegraphics[width=35mm]{images/uni_siegen_logo.png}
+    \includegraphics[width=35mm]{images/logos/uni_siegen_logo.png}
   \end{center}
   \null\vfil  
   
