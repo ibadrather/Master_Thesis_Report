@@ -1,8 +1,8 @@
 \chapter{Introduction} \label{chapter_one}
 
-Cameras have become an integral part of our lives in the current world  \citet{ibad2022}. People around us use cameras regularly, be it their smartphone camera, a hobbyist camera setup or professional cameras. Also everyone want a cameras that produce the good picture quality for as cheap as possible. Researchers are constantly working towards making this technology better while also trying to make it cheaper.
+Cameras have become an integral part of our lives in the current world  \citet{ibad2022}. People around us use cameras regularly, be it their smartphone camera, a hobbyist camera setup or professional cameras. Also everyone wants a camera that produces good picture quality for as cheap as possible. Also the researchers are constantly working towards making this technology better while also trying to make it cheaper.
 
-There are many challenges involved in making the picture quality better. For example you may have noticed if you are taking a photograph and the camera moves while taking the photograph or a video, the photo does not look good. This problem is solvable if you have a tripod or expensive motorised stabilisers like Gimbals. But as you may have understood that is not always feasible, economically and logistically.
+There are many challenges involved in making the picture quality better. For example you may have noticed while you are using your camera, if it moves too much, the photo or the video does not look good. This problem is solvable if you have a tripod or expensive motorised stabilisers like Gimbals. But as you may have understood that is not always feasible, economically and logistically.
 
 These problems are aggravated on microscopic levels or if you are using a zoom lens, in that case even very small movements can cause the picture quality to degrade. That is exactly the problem I am facing for this research. I am working with a GoPro Hero 10 but with a different lens than fitted from the factory one. I switched the lens to a Macro or Zoom Lens with less field of view (FOV) and different focal length. Switching the lens resulted in the default stabilising provided by the GoPro not working.
 
@@ -11,14 +11,27 @@ As a part of this research work, I will explore different ways in which I can st
 % Motivation
 \section{Motivation}
 \begin{itemize}
-\item Why are we doing this?
+\item Why am I doing this?
 \item Why is this relevant?
-\item Why is this exciting?
 \item What concrete problem do we want to solve?
 \item Is this problem big enough?
+
+\item Why is this exciting?
 \item What makes this problem challenging?
 \item Why an IMU Sensor? Why not just use Images?
 \end{itemize}
 
+How many times have to captured a video of something and when you looked at it later you found out that the video  is shaky? 
+
+Image stabilisation is inherent in producing good video quality. Be it a 250,000 Euro television broadcast camera or a 100 euro hobbyist camera, stabilisation of some sort is necessary.
+
+
 \section{Challenges of the Research}
+Sensors are inherently noisy and this noise can be very difficult to deal with. The problem due to noise problem is exacerbated in case of IMU. Due to the double integration present in the inertial navigation algorithm, the noise adds up and the outputs shoot in the unacceptable ranges. IMU also comes with biases and like the noise it also makes pose estimation difficult. There are a lot of algorithms and techniques that exist to deal with these issues;
+1) Signal Filtering
+2) Kalman Filtering
+
+The use of these techniques makes the pose estimation better but it is still far from perfect. And for this case, perfect is what we need. We need accuracy in the range of 0.1 mm for the stabilisation to look smooth.
+
+We have to do all this in real-time.
 
