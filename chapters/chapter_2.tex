@@ -2,15 +2,59 @@
 
 
 \section{Image Stabilisation}
-What is image stabilisation?
+If the camera is not stationary during video capture the output video quality may degrade and it not look very good. Depending on the movements during capture, the may look very shaky or even the subjects of the video may not be properly visible. This is undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or robot arm. 
+
+The motion of the camera can be high-frequency tremors due vibration of the mounting point or low frequency such as movement of handheld camera during walking \citep{dis_review}. Practically, in most of the video recording scenarios, the camera will have some movement. The goal of image stabilization is to create a output video with same visual content without the undesired movements. 
 
 % Start: Image Stabilisation
 \subsection{Types of Image Stabilisation}
+To deal with such movements and to make the video stable various techniques exist. These techniques are grouped in two categories:
+
+\begin{itemize}
+\item Hardware Image Stabilization
+\item Digital Image Stabilization  
+\end{itemize}
+There are techniques which combine both these methods and are called Hybrid Image Stabilization techniques.
+
+The goal of each of these stabilization techniques is to estimate the motion and then do something to counteract that motion. Let' see how these movements are countered in each of these techniques.
+
 \subsubsection{Hardware Image Stabilisation}
-Compensate camera movements with hardware. Expensive.
+Hardware image stabilization (HIS) at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video in the first place. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilised by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. These methods although mostly effective are not perfect and have both advantages and disadvantages.
+
+\textbf{Advantages of HIS: }
+
+\begin{itemize}
+\item No post-processing for stabilization needed.
+\item Works irrespective of the nature of object being captured.
+\item Full image without cropping can be used.
+\end{itemize}
+
+\textbf{Disadvantages of HIS:}
+\begin{itemize}
+\item Camera setups are very bulky.
+\item These solutions can be very expensive.
+\item More moving parts means higher maintenance.
+\item Cannot be improved once hardware is implemented.
+\end{itemize}
 
 \subsubsection{Digital Image Stabilisation}
-Compensate movements in post-processing. Economical.
+The video is stabilized by estimating pose for each of the frames and based on an initial pose or stabilized trajectory the frames are warped resulting in a stabilized video output. The pose can be estimated either using image features or an IMU sensor. This is the technique I am using for my research and I will be talking in depth about this technique in the upcoming sections of this report. This method has its advantages and disadvantages too. 
+
+\textbf{Advantages:}
+\begin{itemize}
+\item Camera setup can be light weight and cheap
+\item Easy to modify or enhance stabilization software
+\item Multiple stabilization algorithms can be tried in post-processing
+\item Does not require additional hardware
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+\item Camera setup can be light weight and cheap
+\item Easy to modify or enhance stabilization software
+\item Multiple stabilization algorithms can be tried in post-processing
+\item Does not require additional hardware
+\end{itemize}
 
 \subsection{How Digital Image Stabilisation works}
 We are interested in DIS so we will introduce the fundamentals.
@@ -45,7 +89,6 @@ Based on the algorithm we can see that to estimate the pose, we need to do integ
 \subsection{Noise Models}
 Sensors readings are inherent to noise. There is all kinds of noise which we have to deal with.
 
-
 \subsubsection{Gyro Error Characteristics}
 In table \ref{tab:gyro_error} you can see all errors in MEMS gyroscope.
 % gyro error table
@@ -55,11 +98,12 @@ In table \ref{tab:gyro_error} you can see all errors in MEMS gyroscope.
      \thead{Error Type} & \thead{Description} & \thead{Result of Integration} \\ \hline
      Bias & 
      A constant Bias epsilon & 
-     Steadily growing angular error.theta(t) = epsilon*t  \\
+     Steadily growing angular error.  \[\theta(t) = \epsilon.(t)\] \\
      \hline
      White Noise & 
      White noise with some standard deviation sigma & 
-     An angular random walk, whose standard deviation grows with the square root of time. \\
+     An angular random walk, whose standard deviation grows with the square root of time. 
+     \[\sigma_\theta(t) = \sigma.\sqrt{\delta.t}\] \\
      \hline
      Temperature Effects & 
      Temperature dependent residual bias & 
@@ -87,11 +131,12 @@ In table \ref{tab:accel_error} you can see all errors in an MEMS accelerometer.
      \thead{Error Type} & \thead{Description} & \thead{Result of Double Integration} \\ \hline
      Bias & 
      A constant Bias epsilon in the accelerometer's output signal. & 
-     A quadratically growing position error. s(t) = epsilon * (t²)/2  \\
+     A quadratically growing position error. \[s(t) = \epsilon . \frac{t^{2}}{2}\]   \\
      \hline
      White Noise & 
      White noise with some standard deviation sigma & 
-     A second order random walk. The standard deviation of the position error grows as sigmas(t) = sigma.. \\
+     A second order random walk. The standard deviation of the position error grows as
+     \[\sigma_s(t) = \sigma . t^{\frac{3}{2}} . \sqrt{\frac{\sigma . t}{3}}\]   \\
      \hline
      Temperature Effects & 
      Temperature dependent residual bias & 
@@ -131,3 +176,8 @@ Talk about attention in Neural Networks.
 
 \subsection{Transformer Networks}
 How self attention is used in Neural Networks.
+
+
+\begin{equation}   
+        \theta(t) = \epsilon.(t)
+    \end{equation}  \\
