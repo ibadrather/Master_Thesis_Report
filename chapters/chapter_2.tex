@@ -1,8 +1,9 @@
-\chapter{Fundamental Blocks of the Research} \label{chapter_two}
+\chapter{Fundamental Blocks of the Work} \label{chapter_two}
 
 
 \section{Image Stabilisation}
-If a camera is not stationary during video capture the output video quality may degrade and it may not look very good. Depending on the movements during capture, it may look very shaky or even the subjects of the video may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or robot arm.
+\label{sec:image_stab}
+If a camera is not stationary during video capture the output video quality may degrade and not look very good. Depending on the movements during capture, video may look very shaky or even the subjects may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or robot arm.
 
 The motion of the camera can be high-frequency tremors due to vibration, shaking or jiggling of the mounting point \citep{ryu2012robust} or low frequency such as movement of handheld camera during walking \citep{dis_review}. Practically, in most of the video recording scenarios, the camera will have some movement. The goal of image stabilization is to create a output video with same visual content without the undesired movements. 
 
@@ -16,10 +17,10 @@ To deal with such movements and to make the video stable various techniques exis
 \end{itemize}
 There are techniques which combine both these methods and are called Hybrid Image Stabilization techniques.
 
-The goal of each of these stabilization techniques is to estimate the motion or pose and then do something to counteract that motion. I will talk about Pose-Estimation in depth in the later sections of this report. For now, let' see how these movements are countered or how the video is stabilized in each of these techniques.
+The goal of each of these stabilization techniques is to estimate the motion or pose and then use the estimated motion to stabilize the video. Motion/pose estimation will be discussed in the section \ref{sec:pose_estimation} in detail.
 
 \subsubsection{Hardware Image Stabilisation (HIS)}
-Hardware image stabilization at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video in the first place. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilised by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. After the motions have been counter-acted upon, images are captured which results in a stabilized video output as seen in figure \ref{fig:his}. These methods although mostly effective are not perfect and have both advantages and disadvantages.
+Hardware image stabilization at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilised by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. After the motions have been counter-acted upon, images are captured which results in a stabilized video output as seen in figure \ref{fig:his}. These methods although mostly effective are not perfect and have both advantages and disadvantages.
 
 \begin{figure}
 \centering
@@ -47,7 +48,7 @@ Hardware image stabilization at its core means moving the lens or the image sens
 \end{itemize}
 
 \subsubsection{Digital Image Stabilisation (DIS)}
-Digital Image Stabilization also called Digital Video Stabilization (DVS) is a software based image stabilization technique \citep{dis_review}. The technique here is similar what is done is HIS i.e. first motion of the camera is estimated (pose-estimation) and based on this, the image is stabilized. The difference here is that after pose estimation is done, instead of moving around the hardware a suitable transformation (warping) is applied to the image \citep{dis_feat_track} as shown is figure \ref{fig:dis}. The resulting stabilized image and hence the video is motionless irrespective of the camera motions. I will discuss this in more depth in the upcoming sections of this report. DIS can be a very powerful technique but like other methods and techniques, it has its advantages and disadvantages.
+Digital Image Stabilization also called Digital Video Stabilization (DVS) is a software based image stabilization technique \citep{dis_review}. The technique here is similar what is done is HIS i.e. first motion of the camera is estimated (pose-estimation) and based on this, the image is stabilized. The difference here is that after pose estimation is done, instead of moving around the hardware a suitable transformation (warping) is applied to the image \citep{dis_feat_track} as shown is figure \ref{fig:dis}. The resulting stabilized image (video) is motionless irrespective of the camera motions. DIS is be a very powerful technique but like other methods and techniques, it has its advantages and disadvantages.
 
 \begin{figure}
 \centering
@@ -74,10 +75,11 @@ Digital Image Stabilization also called Digital Video Stabilization (DVS) is a s
 \item Some videos are very difficult (even impossible) to stabilise if there is too much vibration or the features are not visible.
 \item May require a lot of computational power (optical flow)
 \end{itemize}
-For my research purpose I will be using digital image stabilization.  I will be discussing in the future sections why I am choosing this technique. First, there are some other topics I need to discuss.
+This work focuses on sensor based digital image stabilisation. The reason for this will be discussed in subsequent sections. 
 
 % Start: Pose Estimation
 \section{Camera Motion Estimation for Image Stabilization}
+\label{sec:pose_estimation}
 Camera motion (pose) estimation is very important and one of the most challenging part of image stabilization. Before hardware and digital stabilization techniques/algorithms can be implemented, we need to do pose estimation to figure out the camera motions. Then based on these camera motions (poses) we can stabilize a video. The accuracy of motion estimation ultimately determines the effectively of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor based and software based techniques exist as show in figure \ref{fig:cam_pose_est}. 
 
 \begin{figure}
@@ -125,6 +127,7 @@ Pose estimation is a huge are of research especially for the field of robotics a
 
 % Start: IMU Sensors
 \section{Inertial Measurement Unit (IMU) Sensors}
+\label{sec:imu}
 IMU sensor is one of the most commonly used sensors in the world and present all around us in mobile devices, Virtual Reality gear and camera. It is very common to use IMU sensor for pose estimation. An IMU sensor measures acceleration(m/s²) and angular velocity (rad/s).  They can make these measurements in multiple degrees of freedom. For example, a 6-DoF IMU sensor includes a 3-axis accelerometer and 3 axis gyroscope  \citep{constant2021data}. The accelerometer will make independent acceleration measurements in let's say x, y and z directions. Similarly the gyroscope makes independent angular velocity measurements about these three axis.
 
 IMU sensors are used in a wide variety of applications like navigation, robotics, drones, smart watches, sports learning, augmented reality systems, industrial quality control \citep{ahmad2013reviews}  and also for image stabilization in cameras. In all these applications, IMU sensor is used for pose estimation in some form; either for absolute pose estimation or change in pose. It is important to note that for my application here the IMU will be strapped on to the camera system. Which means the IMU sensor can has all 6 of its DoF.
@@ -132,18 +135,18 @@ IMU sensors are used in a wide variety of applications like navigation, robotics
 There are a lot of reasons to use IMU sensors and these reasons are surely a very huge contributor to them being one of the most commonly used sensors in the world. Some of their qualities are \citep{woodman2007introduction}.:
 
 \begin{itemize}
-\item They have small size, 
-\item low weight, 
-\item rugged construction, 
-\item low power consumption, 
-\item cheap, 
-\item high reliability, 
+\item They have small size
+\item low weight,
+\item rugged construction 
+\item low power consumption 
+\item cheap
+\item high reliability 
 \item low maintenance
 \item can be used in hostile environments 
 \end{itemize}
 
 \subsection{Pose Estimation with IMUs}
-Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, roll) with respect to some reference coordinate system. To calculate pose of an object, we continuously take measurements from IMU and using some algorithms we calculate the pose. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}.
+Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, roll) with respect to some reference coordinate system. To calculate pose of an object, we continuously take measurements from IMU and using some algorithm we estimate the pose. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noises and biases \citep{woodman2007introduction} which need to be accounted for.
 
 \begin{figure}
 \includegraphics[scale=0.2]{images/fig_chapter2/strap_imu_algo.png}
@@ -151,10 +154,8 @@ Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, rol
 \label{fig:strapdown_imu}
 \end{figure}
 
-Based on the algorithm we can see that to estimate the pose, we need to do integration on Gyroscope values to get orientation. And double integration on Accelerometer values to get the position. That seems simple but the IMU readings are not ideal, they contain noises and biases \citep{woodman2007introduction} which need to be accounted for.
-
 \subsection{IMU Noise Models}
-Sensor outputs are inherent to noise. There is different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: pure signal, bias and white noise.
+Sensor outputs are inherent to noise. There is different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: true signal, bias and white noise.
 
 \textbf{Gyroscope}
 \begin{equation}
@@ -162,7 +163,7 @@ Sensor outputs are inherent to noise. There is different types of noise with whi
 \label{eqn:gyro_noise}
 \end{equation}
 
-Where $ \omega_{n}(t) $ is the noisy gyroscope signal, $ \omega(t) $ is the pure gyroscope signal, $ b_{g}(t) $ is the gyroscope bias and $ n_{g} $ is the gyroscope white noise.
+Where $ \omega_{n}(t) $ is the noisy gyroscope signal, $ \omega(t) $ is the true gyroscope signal, $ b_{g}(t) $ is the gyroscope bias and $ n_{g} $ is the gyroscope white noise.
 
 \textbf{Accelerometer}
 \begin{equation}
@@ -170,17 +171,19 @@ Where $ \omega_{n}(t) $ is the noisy gyroscope signal, $ \omega(t) $ is the pure
 \label{eqn:accel_noise}
 \end{equation}
 
-Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the pure accelerometer signal, $ b_{a}(t) $ is the accelerometer bias and $ n_{a} $ is the accelerometer white noise.
+Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the true accelerometer signal, $ b_{a}(t) $ is the accelerometer bias and $ n_{a} $ is the accelerometer white noise.
 
 For both gyroscope and accelerometer the signal can be independently modeled this way in each of its axis (x, y and z) \citep{imu_noise}. Although the modelling equation looks the same for both IMU and but they have different effects on pose estimation as the strap-down inertial algorithm suggests.
 
-To demonstrate the \textit{Noise Model}, let's take a pure unit signal as show in figure \ref{fig:imu_noise} a. \textbf{Bias} can be defined as a noise in signal which is linearly increasing with time as show in figure \ref{fig:imu_noise} (Note: Bias can be subtractive too, here it is shown as additive and the bias in the figure is an exaggeration for demonstration purpose). If we add the bias to the pure signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
+To demonstrate the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise} a. \textbf{Bias} can be defined as a noise in signal which is linearly increasing with time as show in figure \ref{fig:imu_noise} 
+%(Note: Bias can be subtractive too, here it is shown as additive and the bias in the figure is an exaggeration for demonstration purpose). 
+If we add the bias to the true signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
 
 \begin{figure}
   \begin{subfigure}{\linewidth}
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/pure_signal.pdf}\hfill
+  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/true_signal.pdf}\hfill
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/bias.pdf}
-  \caption{Pure Signal and bias}
+  \caption{true Signal and bias}
   \end{subfigure}\par\medskip
   \begin{subfigure}{\linewidth}
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_bias.pdf}\hfill
@@ -196,7 +199,7 @@ To demonstrate the \textit{Noise Model}, let's take a pure unit signal as show i
 \label{fig:imu_noise}
 \end{figure}
 
-As you can see from the plots, the noisy signal looks very different from the pure signal. Using the noisy signal directly for pose estimation can lead to very inaccurate results. There are various signal processing techniques/algorithms which can be used to mitigate this issue and will be discussed in the upcoming sections of this report.
+As you can see from the plots, the noisy signal looks very different from the true signal. Using the noisy signal directly for pose estimation can lead to very inaccurate results. There are various signal processing techniques/algorithms which can be used to mitigate this issue and will be discussed in the upcoming sections of this report.
 
 \subsubsection{Gyro Error Characteristics}
 To get orientation from the gyroscope, the readings need to be integrated once and the global orientation needs to be updated. This needs to be done for each of the gyroscope axis. Doing this continuously with the noisy signal will result into erroneous  orientation tracking if nothing is done about the noise. In table \ref{tab:gyro_error} you can see all the errors and effect of those on orientation measurement.
@@ -208,12 +211,12 @@ To get orientation from the gyroscope, the readings need to be integrated once a
      \thead{Error Type} & \thead{Description} & \thead{Result of Integration} \\ \hline
      Bias & 
      A constant Bias epsilon & 
-     Steadily growing angular error.  \[\theta(t) = \epsilon.(t)\] \\
+     Steadily growing angular error.  \[\theta(t) = \epsilon(t)\] \\
      \hline
      White Noise & 
      White noise with some standard deviation sigma & 
      An angular random walk, whose standard deviation grows with the square root of time. 
-     \[\sigma_\theta(t) = \sigma.\sqrt{\delta.t}\] \\
+     \[\sigma_\theta(t) = \sigma \sqrt{\delta t}\] \\
      \hline
      Temperature Effects & 
      Temperature dependent residual bias & 
@@ -233,7 +236,7 @@ To get orientation from the gyroscope, the readings need to be integrated once a
 \end{table}
 
 \subsubsection{Accelerometer Error Characteristics}
-Generating position information from accelerometer is not a single step like in case of Gyroscope. As you can see in the strap-down inertial navigation algorithm shown in figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to projected into the global axis using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
+Generating position information from accelerometer is not a single step like in case of Gyroscope. Based the strap-down inertial navigation algorithm shown in figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to projected into the global axis using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
 
 So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:accel_error} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
@@ -244,12 +247,12 @@ So, there is double integration present in the algorithm. We also have a noisy s
      \thead{Error Type} & \thead{Description} & \thead{Result of Double Integration} \\ \hline
      Bias & 
      A constant Bias epsilon in the accelerometer's output signal. & 
-     A quadratically growing position error. \[s(t) = \epsilon . \frac{t^{2}}{2}\]   \\
+     A quadratically growing position error. \[s(t) = \epsilon  \frac{t^{2}}{2}\]   \\
      \hline
      White Noise & 
      White noise with some standard deviation sigma & 
      A second order random walk. The standard deviation of the position error grows as
-     \[\sigma_s(t) = \sigma . t^{\frac{3}{2}} . \sqrt{\frac{\sigma . t}{3}}\]   \\
+     \[\sigma_s(t) = \sigma  t^{\frac{3}{2}}  \sqrt{\frac{\sigma  t}{3}}\]   \\
      \hline
      Temperature Effects & 
      Temperature dependent residual bias & 
@@ -275,16 +278,43 @@ These issues presents a lot of challenges especially for our case, as we require
 
 % Start: Pose Estimation
 \section{Pose Estimation using IMU}
-There are classical and modern approaches that I will discuss in this section.
+Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdown_imu}) and Newtonian mechanics, pose can be estimated from the IMU readings using equation \ref{eqn:ori_imu_readings} and equation \ref{eqn:pos_imu_readings} \citep{rao2022ctin}. We need a history of pose for the iterative pose estimation to work. $ \omega $ and $ a $ are the gyroscope and accelerometer readings respectively as defined in section \ref{sec:imu}.
 
-\subsection{Classical Algorithms}
+\begin{equation}
+  \label{eqn:ori_imu_readings}
+  \begin{aligned}
+    O(t) = O(t - dt) exp(\int_{t-dt}^{t} \Omega(t) dt) \\
+  \end{aligned}
+\end{equation}
+
+ Orientation $ O(t) $ is the updated orientation in global frame at current timestamp using orientation at previous timestamp $ O(t - dt) $  and the sensor readings $ \Omega(t) $ as shown in equation \ref{eqn:ori_imu_readings}.
+
+\begin{equation}
+  \label{eqn:pos_imu_readings}
+  \begin{gathered}
+    a_g(t) = O(t).a(t) \\
+    v(t) = v(t-dt) + (a_g(t) - g_g).dt \\
+    P(t) = P(t-dt) + v(t).dt
+  \end{gathered}
+\end{equation}
+
+ Position estimation can be done using a series of mathematical equations as shown in equation \ref{eqn:pos_imu_readings}. The accelerometer readings are first projected onto the global axis based on the orientation $ O(t) $. Then the current velocity $ v(t) $ is calculated by integrating the acceleration $ a_g(t) $ and adding it to velocity at previous time-step $ v(t-dt) $. Finally, to get the current position $ P(t) $ we integrate the velocity $ v(t) $ add it to the previous position. 
+
+These equations are the backbone for classical pose estimation algorithms using IMU sensors. Bias and white noise present in the sensor readings also integrates causing a \textbf{drift} in estimation. In case of Gyroscopes, white noise causes an \textit{angular random walk} whose standard deviation grows proportionally with square root of time \citep{woodman2007introduction}. And leaving the bias unchecked for causes an orientation error growing linearly with time as shown in table  \ref{tab:gyro_error}. In case of accelerometer the drift is aggravated because the orientation error is also contributing to it. The subtraction of gravity $ g $ from the readings is not perfect either and causes further drift. The bias in the readings also increases the error (hence the drift) quadratically with time. On top of all these errors the effect of white noise  is a \textit{second order random walk} whose standard deviation increases quadratically with time as shown in table \ref{tab:accel_error}.
+
+We can very comfortably conclude that using the inertial navigation system in its pure form is not possible for accurate pose estimation. There are several techniques which can be used to diminish the effect of the noise and the bias. Bias can be estimated for any IMU sensor by keeping it stationary for a few seconds. The readings that we get for a stationary IMU sensor is the bias for that sensor. Then this bias can be adjusted in the signal recorded during operation.
+
+But modern learning based methods do not use these equations. Instead they are more data driven and let the neural network infer these relations based on the training data.
+
+\subsection{Classical Techniques}
+IMUs have been used extensively for pose estimation for the better half of the century and were used to track the Apollo 11 rocket that took man to the mars. Various filtering based and Sensor Fusion based algorithms exists to reduce the drift in pose estimation. 
+
 \subsubsection{Signal Filtering}
-\begin{itemize}
-\item Low pass
-\item Moving Average
-\item Kalman filter
-\item Madgwick Filter
-\end{itemize}
+There are also various signal-processing techniques that can be used to reduce the white noise. Noise can be characterised as a high-frequency content in any signal. Therefore, we can use simple filters like a low pass filter or a moving average filter with big horizon to eliminate the noise up to some extent. These techniques are in no way perfect and may even cause loss of true signal if not configured properly.
+
+\subsubsection{Kalman Filter}
+
+
 
 \subsection{Neural Network Based}
 Using Neural networks for pose estimation
