@@ -180,22 +180,27 @@ To demonstrate the \textit{Noise Model}, let's take a true unit signal as show i
 If we add the bias to the true signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
 
 \begin{figure}
+
   \begin{subfigure}{\linewidth}
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/true_signal.pdf}\hfill
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/bias.pdf}
   \caption{true Signal and bias}
   \end{subfigure}\par\medskip
+  
   \begin{subfigure}{\linewidth}
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_bias.pdf}\hfill
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/white_noise.pdf}
   \caption{Signal with bias and white noise}
   \end{subfigure}\par\medskip
+  
   \begin{subfigure}{\linewidth}
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise.pdf}\hfill
   \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise_bias.pdf}
   \caption{Signal with white noise and signal with white noise and bias}
   \end{subfigure}
+  
   \caption{Noise Model Demonstration}
+
 \label{fig:imu_noise}
 \end{figure}
 

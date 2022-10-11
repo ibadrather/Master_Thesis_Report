@@ -46,9 +46,9 @@
 % Load base class 
 
 % For onesided printing uncomment next command
-% \LoadClass[10pt,a4paper,oneside]{report}
+\LoadClass[11pt,a4paper,oneside]{report}
 % For twosided printing comment next command
-\LoadClass[10pt,a4paper,twoside, openright]{report}
+%\LoadClass[10pt,a4paper,twoside, openright]{report}
 
 % Load required Packages
 \RequirePackage[\babellanguage]{babel}
@@ -60,16 +60,16 @@
 \fancypagestyle{plain}{
 	\fancyhead{}% clear all header fields
 	\fancyfoot{}% clear all footer fields
-	\fancyfoot[LE,RO]{\thepage}%
+	\fancyfoot[C]{\thepage}%
 	\renewcommand{\headrulewidth}{0pt}%
 	\renewcommand{\footrulewidth}{0pt}%
 }
 \fancypagestyle{default}{
 	\fancyhead{}% clear all header fields
-	\fancyhead[LE]{\leftmark}
-	\fancyhead[RO]{\rightmark}
+	%\fancyhead[L]{\leftmark}
+	%\fancyhead[R]{\rightmark}
 	\fancyfoot{}% clear all footer fields
-	\fancyfoot[LE,RO]{\thepage}%
+    \fancyfoot[C]{\thepage}%
 	\renewcommand{\headrulewidth}{0.2pt}%
 	\renewcommand{\footrulewidth}{0pt}%
 }
