@@ -337,14 +337,30 @@ Simulated data is based on the analysed real data with vibration characteristics
 
 
 \section{Structuring of Data}
-In classical pose-estimation techniques, every single IMU sample is used individually along with initial condition. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (figure \ref{fig:imu_window_samples})is used as a single sample does not contain enough information. Neural Networks unlike classical mathematics based approaches are data hungry and look for patterns in data and based on these patterns they generate an output. Initially we experimented with small window samples (3 - 20 samples) as shown in figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was higher than the required. It started giving good results once we reach a IMU \textbf{ window size} of 70 to 140 samples (figure \ref{fig:imu_window_samples} b and c). Beyond these the performance does not improve much and the inferences from the neural network become computationally expensive and inference times become very high.
+\label{sec:data_structure}
+In classical pose-estimation techniques, every single IMU sample is used individually along with initial condition. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (figure \ref{fig:imu_window_samples})is used as a single sample does not contain enough information. Neural Networks unlike classical mathematics based approaches are data hungry and look for patterns in data and based on these patterns they generate an output. Initially we experimented with small window samples (3 - 20 samples) as shown in figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was higher than the required. It started giving good results once we reach a IMU \textbf{ window size} of 70 to 140 samples (figure \ref{fig:imu_window_samples}. Beyond these the performance does not improve much and the inferences from the neural network become computationally expensive and inference times become very high.
 
+%% Displacement distribution
 \begin{figure}
-    \centering
-    \includegraphics{images/question_mark.eps}
-    \caption{Different IMU window samples}
-    \label{fig:imu_window_samples}
+    %%
+    \begin{subfigure}{\linewidth}
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_6.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_20.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_65.pdf}\hfill
+    \caption{Window size 6, 20 and 65}
+    \end{subfigure}\par\medskip
+    
+    %%
+    \begin{subfigure}{\linewidth}
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_100.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_144.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_200.pdf}\hfill
+    \caption{Window size 100, 144, 200}
+    \end{subfigure}
+\caption{Different IMU window samples}
+\label{fig:imu_window_samples}
 \end{figure}
+
 
 \section{Mathematics for stabilisation}
 Here we will see what exactly we are trying to find out: (R, T)

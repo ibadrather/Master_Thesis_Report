@@ -1,6 +1,5 @@
 \chapter{Fundamental Blocks of the Work} \label{chapter_two}
 
-
 \section{Image Stabilisation}
 \label{sec:image_stab}
 If a camera is not stationary during video capture the output video quality may degrade and not look very good. Depending on the movements during capture, video may look very shaky or even the subjects may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or robot arm.
@@ -175,31 +174,29 @@ Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the true accel
 
 For both gyroscope and accelerometer the signal can be independently modeled this way in each of its axis (x, y and z) \citep{imu_noise}. Although the modelling equation looks the same for both IMU and but they have different effects on pose estimation as the strap-down inertial algorithm suggests.
 
-To demonstrate the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise} a. \textbf{Bias} can be defined as a noise in signal which is linearly increasing with time as show in figure \ref{fig:imu_noise} 
-%(Note: Bias can be subtractive too, here it is shown as additive and the bias in the figure is an exaggeration for demonstration purpose). 
-If we add the bias to the true signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
+To demonstrate the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise} a. \textbf{Bias} can be defined as constant offset \ref{fig:imu_noise}. If we add the bias to the true signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
 
 \begin{figure}
 
   \begin{subfigure}{\linewidth}
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/true_signal.pdf}\hfill
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/bias.pdf}
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/true_signal.pdf}\hfill
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/bias.pdf}
   \caption{true Signal and bias}
   \end{subfigure}\par\medskip
   
   \begin{subfigure}{\linewidth}
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_bias.pdf}\hfill
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/white_noise.pdf}
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_bias.pdf}\hfill
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/white_noise.pdf}
   \caption{Signal with bias and white noise}
   \end{subfigure}\par\medskip
   
   \begin{subfigure}{\linewidth}
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise.pdf}\hfill
-  \includegraphics[width=.55\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise_bias.pdf}
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise.pdf}\hfill
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise_bias.pdf}
   \caption{Signal with white noise and signal with white noise and bias}
   \end{subfigure}
   
-  \caption{Noise Model Demonstration}
+  \caption{IMU Noise Model Demonstration}
 
 \label{fig:imu_noise}
 \end{figure}
@@ -207,73 +204,42 @@ If we add the bias to the true signal it will look something like as show in fig
 As you can see from the plots, the noisy signal looks very different from the true signal. Using the noisy signal directly for pose estimation can lead to very inaccurate results. There are various signal processing techniques/algorithms which can be used to mitigate this issue and will be discussed in the upcoming sections of this report.
 
 \subsubsection{Gyro Error Characteristics}
-To get orientation from the gyroscope, the readings need to be integrated once and the global orientation needs to be updated. This needs to be done for each of the gyroscope axis. Doing this continuously with the noisy signal will result into erroneous  orientation tracking if nothing is done about the noise. In table \ref{tab:gyro_error} you can see all the errors and effect of those on orientation measurement.
+To get orientation from the gyroscope, the readings need to be integrated once and the global orientation needs to be updated. This needs to be done for each of the gyroscope axis. Doing this continuously with the noisy signal will result into erroneous  orientation tracking if nothing is done about the noise. In table \ref{tab:imu_error_char} you can see all the errors and effect of those on orientation measurement.
 
-% gyro error table
-\begin{table}[ht]
-    \centering
-\begin{tabular}{ l| L| L } \hline
-     \thead{Error Type} & \thead{Description} & \thead{Result of Integration} \\ \hline
-     Bias & 
-     A constant Bias epsilon & 
-     Steadily growing angular error.  \[\theta(t) = \epsilon(t)\] \\
-     \hline
-     White Noise & 
-     White noise with some standard deviation sigma & 
-     An angular random walk, whose standard deviation grows with the square root of time. 
-     \[\sigma_\theta(t) = \sigma \sqrt{\delta t}\] \\
-     \hline
-     Temperature Effects & 
-     Temperature dependent residual bias & 
-     Any residual bias is integrated into orientation, causing an orientation error which grows linearly with time. \\
-     \hline
-     Calibration & 
-     Deterministic errors in scale factors, alignments and gyro linearities & 
-     Orientation drift proportional to the rate and duration of motion. \\
-     \hline
-     Bias Instability & 
-     Bias fluctuations, usually modelled as a bias random walk & 
-     A second order random walk. \\
-     \hline
-\end{tabular}
-    \caption{Summary of Gyro Error Sources \citep{woodman2007introduction}}
-    \label{tab:gyro_error}
-\end{table}
 
 \subsubsection{Accelerometer Error Characteristics}
 Generating position information from accelerometer is not a single step like in case of Gyroscope. Based the strap-down inertial navigation algorithm shown in figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to projected into the global axis using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
 
-So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:accel_error} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
+So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:imu_error_char} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
-% accelerometer error table
+% imu error table
 \begin{table}[ht]
-    \centering
-\begin{tabular}{ l| L| L } \hline
-     \thead{Error Type} & \thead{Description} & \thead{Result of Double Integration} \\ \hline
-     Bias & 
+\centering
+\begin{tabular}{ l| L| L }
+     Error Type & Description & Result of Single/Double Integration \\ 
+     \hline
+     Accel Bias & 
+     A constant Bias epsilon & 
+     Steadily growing angular error.  \[\theta(t) = \epsilon(t)\] \\
+     \hline
+     Accel White Noise & 
+     White noise with some standard deviation sigma & 
+     An angular random walk, whose standard deviation grows with the square root of time. 
+     \[\sigma_\theta(t) = \sigma \sqrt{\delta t}\] \\
+     
+     \hline
+     Gyro Bias & 
      A constant Bias epsilon in the accelerometer's output signal. & 
      A quadratically growing position error. \[s(t) = \epsilon  \frac{t^{2}}{2}\]   \\
      \hline
-     White Noise & 
+     Gyro White Noise & 
      White noise with some standard deviation sigma & 
      A second order random walk. The standard deviation of the position error grows as
      \[\sigma_s(t) = \sigma  t^{\frac{3}{2}}  \sqrt{\frac{\sigma  t}{3}}\]   \\
-     \hline
-     Temperature Effects & 
-     Temperature dependent residual bias & 
-     Any residual bias causes an error in position which grows quadratically with time. \\
-     \hline
-     Calibration & 
-     Deterministic errors in scale factors, alignments and accelerometer linearities & 
-     Position drift proportional to the squared rate and duration of acceleration. \\
-     \hline
-     Bias Instability & 
-     Bias fluctuations, usually modelled as a bias random walk & 
-     A third-order random walk in position. \\
-     \hline
+     
 \end{tabular}
-    \caption{Summary of Accelerometer Error Sources \citep{woodman2007introduction}}
-    \label{tab:accel_error}
+    \caption{Summary of IMU Error Sources \citep{woodman2007introduction}}
+    \label{tab:imu_error_char}
 \end{table}
 
 \subsubsection{Challenges in Working with IMU}
@@ -283,7 +249,7 @@ These issues presents a lot of challenges especially for our case, as we require
 
 % Start: Pose Estimation
 \section{Pose Estimation using IMU}
-Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdown_imu}) and Newtonian mechanics, pose can be estimated from the IMU readings using equation \ref{eqn:ori_imu_readings} and equation \ref{eqn:pos_imu_readings} \citep{rao2022ctin}. We need a history of pose for the iterative pose estimation to work. $ \omega $ and $ a $ are the gyroscope and accelerometer readings respectively as defined in section \ref{sec:imu}.
+Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdown_imu}) and Newtonian mechanics, pose can be estimated from the IMU readings using equation \ref{eqn:ori_imu_readings} and equation \ref{eqn:pos_imu_readings}. We need a history of pose for the iterative pose estimation to work. $ \omega $ and $ a $ are the gyroscope and accelerometer readings respectively as defined in section \ref{sec:imu}.
 
 \begin{equation}
   \label{eqn:ori_imu_readings}
@@ -305,7 +271,7 @@ Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdow
 
  Position estimation can be done using a series of mathematical equations as shown in equation \ref{eqn:pos_imu_readings}. The accelerometer readings are first projected onto the global axis based on the orientation $ O(t) $. Then the current velocity $ v(t) $ is calculated by integrating the acceleration $ a_g(t) $ and adding it to velocity at previous time-step $ v(t-dt) $. Finally, to get the current position $ P(t) $ we integrate the velocity $ v(t) $ add it to the previous position. 
 
-These equations are the backbone for classical pose estimation algorithms using IMU sensors. Bias and white noise present in the sensor readings also integrates causing a \textbf{drift} in estimation. In case of Gyroscopes, white noise causes an \textit{angular random walk} whose standard deviation grows proportionally with square root of time \citep{woodman2007introduction}. And leaving the bias unchecked for causes an orientation error growing linearly with time as shown in table  \ref{tab:gyro_error}. In case of accelerometer the drift is aggravated because the orientation error is also contributing to it. The subtraction of gravity $ g $ from the readings is not perfect either and causes further drift. The bias in the readings also increases the error (hence the drift) quadratically with time. On top of all these errors the effect of white noise  is a \textit{second order random walk} whose standard deviation increases quadratically with time as shown in table \ref{tab:accel_error}.
+These equations are the backbone for classical pose estimation algorithms using IMU sensors. Bias and white noise present in the sensor readings also integrates causing a \textbf{drift} in estimation. In case of Gyroscopes, white noise causes an \textit{angular random walk} whose standard deviation grows proportionally with square root of time \citep{woodman2007introduction}. And leaving the bias unchecked for causes an orientation error growing linearly with time as shown in table  \ref{tab:imu_error_char}. In case of accelerometer the drift is aggravated because the orientation error is also contributing to it. The subtraction of gravity $ g $ from the readings is not perfect either and causes further drift. The bias in the readings also increases the error (hence the drift) quadratically with time. On top of all these errors the effect of white noise  is a \textit{second order random walk} whose standard deviation increases quadratically with time as shown in table \ref{tab:imu_error_char}.
 
 We can very comfortably conclude that using the inertial navigation system in its pure form is not possible for accurate pose estimation. There are several techniques which can be used to diminish the effect of the noise and the bias. Bias can be estimated for any IMU sensor by keeping it stationary for a few seconds. The readings that we get for a stationary IMU sensor is the bias for that sensor. Then this bias can be adjusted in the signal recorded during operation.
 
@@ -318,13 +284,15 @@ IMUs have been used extensively for pose estimation for the better half of the c
 There are also various signal-processing techniques that can be used to reduce the white noise. Noise can be characterised as a high-frequency content in any signal. Therefore, we can use simple filters like a low pass filter or a moving average filter with big horizon to eliminate the noise up to some extent. These techniques are in no way perfect and may even cause loss of true signal if not configured properly.
 
 \subsubsection{Kalman Filter}
-
-
+Kalman filters are very useful for estimation purposes. They can be used to estimate pose using an IMU sensor by filtering noise based on a covariance matrix \citep{ferdinando2012embedded}. The values of this covariance matrix can be varied but there is a trade-off between noise sensitivity and accuracy. Kalman filter is used to fuse multiple sensors to improve the accuracy of estimation. But in our case the accuracy it provides over time is not enough and hence cannot be used.
 
 \subsection{Neural Network Based}
-Using Neural networks for pose estimation
-\begin{itemize}
-\item RIDI
-\item RoNIN
-\item CTIN
-\end{itemize}
+With the advancement of neural networks and their ability to outperform classical algorithms, over the years many techniques have been developed to solve the challenge of double integrating accelerometer readings. Based on the fact that the vibrations in our camera setup have similar characteristics and patterns, a neural network can learn that pattern and make accurate predictions. Some of the techniques which laid the foundation of the methodology we used are discussed in the next sections.
+
+\subsubsection{RIDI: Robust IMU Double Integration}
+RIDI was the first data-driven neural network approach which tackles the challenges of double integrating accelerometer readings. The algorithm regresses a velocity vector from the history of linear accelerations and angular velocities (IMU windows - discussed in section \ref{sec:data_structure}), then corrects low-frequency bias in the linear accelerations, which are integrated twice to estimate position \citep{yan2018ridi}. The analysis of results manifested that this algorithm outperformed the heuristic-based methods and even came closer to visual inertial navigation \citep{yan2018ridi}. The issue with this is it can only regress position and orientation estimation needs to be achieved using classical algorithms.
+
+\subsubsection{RoNIN: Robust Neural Inertial Navigation in the Wild}
+Developed by the same team as RIDI, RoNIN uses more advanced neural network architectures like ResNet, LSTM and TCN as its backbone to regress a velocity vecotor given a window of IMU samples \citep{herath2020ronin}. Using these architectures and increasing the quality and size of data RoNIN outperforms RIDI and sets a new benchmark for inertial navigation. Out methodology is hugely infleuenced by this technique and is discussed in chapter \ref{chapter_four} of this report.
+\subsubsection{CTIN: Robust Contextual Transformer Network for Inertial Navigation}
+This algorithm takes advantage of the recent advances in deep learning by using Multi-Headed-Attention (MHA) mechanism introduced in \citep{vaswani2017attention}. It uses a ResNet based encoder enhanced by local and global MHA to capture spatial contextual information from IMU measurements \citep{rao2022ctin}. CTIN is claimed to be robust and to outperform state-of-the-art models but cannot be evaluated as it is not available publicly.
