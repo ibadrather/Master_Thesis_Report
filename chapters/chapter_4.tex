@@ -338,7 +338,7 @@ Simulated data is based on the analysed real data with vibration characteristics
 
 \section{Structuring of Data}
 \label{sec:data_structure}
-In classical pose-estimation techniques, every single IMU sample is used individually along with initial condition. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (figure \ref{fig:imu_window_samples})is used as a single sample does not contain enough information. Neural Networks unlike classical mathematics based approaches are data hungry and look for patterns in data and based on these patterns they generate an output. Initially we experimented with small window samples (3 - 20 samples) as shown in figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was higher than the required. It started giving good results once we reach a IMU \textbf{ window size} of 70 to 140 samples (figure \ref{fig:imu_window_samples}. Beyond these the performance does not improve much and the inferences from the neural network become computationally expensive and inference times become very high.
+In classical pose-estimation techniques, every single IMU sample is used individually along with initial condition. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (figure \ref{fig:imu_window_samples})is used as a single sample does not contain enough information. Neural Networks unlike classical mathematics based approaches are data hungry and look for patterns in data and based on these patterns they generate an output. Initially we experimented with small window samples (3 - 20 samples) as shown in figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was higher than the required. It started giving good results once we reach a IMU \textbf{ window size} of 70 to 140 samples (figure \ref{fig:imu_window_samples}). Beyond these the performance does not improve much and the inferences from the neural network become computationally expensive and inference latency become very high.
 
 %% Displacement distribution
 \begin{figure}
@@ -366,18 +366,50 @@ In classical pose-estimation techniques, every single IMU sample is used individ
 Here we will see what exactly we are trying to find out: (R, T)
 
 \section{Training and Testing of Various Neural Networks}
-We will use various Neural Network types and Architectures.
+Various neural networks architectures were trained and tested to accurately estimate the camera pose with respect to a stabilised trajectory. Network takes as input the sensor readings coming from an IMU and the network is trained against the pose with respect to stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in figure \ref{fig:stab_traj_ideal}. 
 
-\begin{itemize}
-\item CNNs
-\item RNNs: LSTMS 
-\item Transformers
-\item Temporal Fusion Transformers
-\item CNNs
-\item Resnets
-\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.25]{images/fig_chapter2/stab_traj_ideal.pdf}
+    \caption{Stabilization Trajectory (Ideal)}
+    \label{fig:stab_traj_ideal}
+\end{figure}
 
-\section{Image Stabilisation based on the Techniques Used}
+The size of input to the network is variable based on which if we want to only use Accelerometer readings (3, window-size) or both Accelerometer and Gyroscope sensor readings (6, window-size). The use of accelerometer readings is must because destabilization caused in our use case is mostly due to linear displacements as discussed in chapter section \ref{sec:imu} of this report. 
+
+Various neural network architectures like CNN, MLP, LSTM, ResNet, Transformers and their variations were trained and tested for stabilization trajectory regression. Out of these CNN, ResNet and Transformer architectures had acceptable performance. 
+
+\subsection{Convolutional Neural Network}
+
+\begin{figure}
+    \centering
+    \includegraphics{images/fig_chapter2/nns/cnn_mt.pdf}
+    \caption{Convolutional Neural Network Used}
+    \label{fig:cnn_used}
+\end{figure}
+
+
+\subsection{ResNet}
+
+\begin{figure}
+    \centering
+    \includegraphics{images/fig_chapter2/nns/resnet_mt.pdf}
+    \caption{CNN with Residual Skip Connections}
+    \label{fig:resnet_used}
+\end{figure}
+
+\subsection{CNN-Transformer}
+
+\begin{figure}
+    \centering
+    \includegraphics{images/fig_chapter2/nns/transformer_mt.pdf}
+    \caption{CNN-Transformer Network Used}
+    \label{fig:cnn_transformer_used}
+\end{figure}
+
+
+\section{Video Stabilization}
 We will see the Stabilized Videos and discuss about how they look visually to different people.
+
 
 
