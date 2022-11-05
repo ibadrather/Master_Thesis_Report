@@ -46,7 +46,7 @@
 % Load base class 
 
 % For onesided printing uncomment next command
-\LoadClass[11pt,a4paper,oneside]{report}
+\LoadClass[11pt,a4paper, oneside]{report}
 % For twosided printing comment next command
 %\LoadClass[10pt,a4paper,twoside, openright]{report}
 

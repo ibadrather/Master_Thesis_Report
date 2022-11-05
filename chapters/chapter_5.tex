@@ -1,74 +1,8 @@
-\chapter{DIS Deployment} \label{chapter_five}
+\chapter{Results and Discussions} \label{chapter_five}
 
-In the previous chapter we discussed how the model was developed, what data goes into the model and why CNN-Transformer architecture performs better than CNN and ResNet architectures. After deploying the trained model for predictions, low \textbf{Inference Latency} is desirable especially in latency critical applications like ours. 
-
-Figure xx shows the digital image stabilization pipeline and our goal is to minimise the time taken at each step. The video (images) are coming at 60 FPS from the camera have 4K resolution (3840x2160 pixels). We ideally have 1/60 seconds (16.67 ms) to complete all the steps of the DIS pipeline. In this pipeline, Model Inference and Stabilization grid calculation take most of the given time. Stabilization grid calculation is a series of matrix multiplications and has been already optimized. Thus, we can only make a meaningful change related to model inferences.
-
-\section{Making Models Fast}
-There are many techniques to reduce the inference latency of neural network models. Using these methods may reduce the performance of a neural network but are essential for deployment as models in their original form may not be usable at all. Some of the popular methods are discussed below.
-
-\subsection{Altering Model Weights}
-This is a very common approach used to to tackle high latency of deep learning models especially in case of edge hardware deployment. We can \textbf{quantize} the model by by converting the weights from floating point (32-bits) to integers (8 bits). This decreases the memory requirements significantly while also improving CPU and hardware accelerator latency \citep{FastModels}. 
-
-Another recent approach is to convert the model to \textbf{half-precision} (16-bit floating point). It acts as a middle ground between FP32 and INT8 and the performance trade-off is reduced while decreasing the model size. Another very important thing to note is that not all layers have high latency and thus selective weight altering for layers like convolution layers can also be done making the performance trade-off even smaller.
-
-\subsection{Making Models Lean}
-The field of deep-learning is growing at a very high rate and we have a large selection of various neural network architectures some even with more than 100 Billion trainable parameters. But while developing deep-learning models, our goal should be to use models with the lowest number of parameters and complex layers while keeping the performance acceptable. The smaller the model is the better its inference latency. 
-\section{Model Inference Latency on various Hardware}
-Various trained models (CNN, ResNet and Transformer) are checked for inference latency and the results are summarised in table x. Models were also quantized or converted to ONNX for deployment. The models were inferred 1000 times and the result in the table is an average.
-
-% Sim Vibration characteristics
- \begin{table}[ht]
-\centering
-\begin{tabular}{ l | L | L | L }
-    
-    Architecture  & 
-    Format & 
-    No. of Parameters &
-    Inference Latency (ms) \\
-    \hline
-    
-    CNN & 
-    PyTorch Checkpoint (.ckpt)  & 
-    00  &
-    00  \\
-    
-    
-    CNN & 
-    ONNX (.onnx)  & 
-    00  &
-    00  \\
-    
-    ResNet & 
-    PyTorch Checkpoint (.ckpt)  & 
-    00  &
-    00  \\
-    
-    
-    ResNet & 
-    ONNX (.onnx)  & 
-    00  &
-    00  \\
-    
-    CNN-Transformer & 
-    PyTorch Checkpoint (.ckpt)  & 
-    00  &
-    00  \\
-    
-    
-    CNN-Transformer & 
-    ONNX (.onnx)  & 
-    00  &
-    00  \\
-    
-    
-      
-    
-    \hline
-   
-\end{tabular}
-    \caption{Inference Latency of Models}
-    \label{tab:model_inference}
-\end{table} %%%%
-
-
+\begin{itemize}
+\item Which method worked the best?
+\item What was the effect of data structuring? 
+\item Is the stabilisation good enough?
+\item Was data enough Domain Randomised?
+\end{itemize}
