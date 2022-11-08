@@ -1,10 +1,10 @@
 \chapter{Fundamental Blocks of the Work} \label{chapter_two}
 
-This chapter introduces how Image Stabilization works and which techniques are available to us. Challenges associated and the possible solutions are discussed 
+In the previous chapter I discussed the importance of Image Stabilization (Video Stabilization) and the challenges associated performing it using an IMU sensor. This chapter contains the image stabilization techniques available and also we make a case for our chosen technique. Then we will also discuss in depth the challenges associated with IMU pose-estimation and how we can overcome those challenges. Types of neural networks and their applications will also be briefly conferred as they are a huge part of this work.
 
 \section{Image Stabilisation}
 \label{sec:image_stab}
-If a camera is not stationary during video capture the output video quality may degrade and not look very good. Depending on the movements during capture, video may look very shaky or even the subjects may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or robot arm.
+If a camera is not stationary during video capture the output video quality may degrade and not look good. Depending on the movements during capture, video may look very shaky or even the subjects may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. The solution to this maybe to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or a robot arm.
 
 The motion of the camera can be high-frequency tremors due to vibration, shaking or jiggling of the mounting point \citep{ryu2012robust} or low frequency such as movement of handheld camera during walking \citep{dis_review}. Practically, in most of the video recording scenarios, the camera will have some movement. The goal of image stabilization is to create a output video with same visual content without the undesired movements. 
 
@@ -45,7 +45,7 @@ Hardware image stabilization at its core means moving the lens or the image sens
 \item These solutions can be very expensive.
 \item More moving parts means higher maintenance.
 \item Cannot be improved once hardware is implemented.
-\item No possible on all camera setups.
+\item Not possible on all camera setups.
 \end{itemize}
 
 \subsubsection{Digital Image Stabilisation (DIS)}
@@ -76,12 +76,13 @@ Digital Image Stabilization also called Digital Video Stabilization (DVS) is a s
 \item Some videos are very difficult (even impossible) to stabilise if there is too much vibration or the features are not visible.
 \item May require a lot of computational power (optical flow)
 \end{itemize}
-This work focuses on sensor based digital image stabilisation. The reason for this will be discussed in subsequent sections. 
 
-% Start: Pose Estimation
-\section{Camera Motion Estimation for Image Stabilization}
+Now we know that for any type of image stabilization motion estimation is fundamental and this is what will be discussed in the next section of this report.
+
+% Start: Motion Estimation
+\section{Motion Estimation for Image Stabilization}
 \label{sec:pose_estimation}
-Camera motion (pose) estimation is very important and one of the most challenging part of image stabilization. Before hardware and digital stabilization techniques/algorithms can be implemented, we need to do pose estimation to figure out the camera motions. Then based on these camera motions (poses) we can stabilize a video. The accuracy of motion estimation ultimately determines the effectively of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor based and software based techniques exist as show in figure \ref{fig:cam_pose_est}. 
+Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques/algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on these camera motions we can stabilize a video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor based and software based techniques exist as show in figure \ref{fig:cam_pose_est}.
 
 \begin{figure}
 \centering
@@ -90,10 +91,8 @@ Camera motion (pose) estimation is very important and one of the most challengin
 \label{fig:cam_pose_est}
 \end{figure}
 
-IMU sensors are widely used for pose estimation in image stabilization. I will go into depth about IMU sensors in the next section of this report. There are many other software based pose estimation techniques. 
 
 \subsection{Software based motion estimation techniques}
-
 Software based motion estimation techniques/algorithms use the images (frames) coming from the camera for motion estimation and subsequently for stabilization. Some of these software based techniques are listed below \citep{dis_review}:
 
 \begin{itemize}
@@ -102,15 +101,15 @@ Software based motion estimation techniques/algorithms use the images (frames) c
 \item Feature-Matching
 \end{itemize}
 
-I will now briefly discuss how each of these approaches/algorithms are used in estimation of camera movements. This will also lay a foundation for the reasons as to why I am not using any of these techniques for my research.
+Each of these approaches/algorithms used in motion estimation are briefly discussed in the subsequent sections. This will also lay a foundation for why we are not using any of these techniques for this work.
 
 \subsubsection{Pixel-Based Matching}
 This method estimates pose by determining the motion of pixels between two frames \citep{dis_review}. For correspondence determination, luminance of two consecutive frames is assumed to be constant throughout. This poses a problem and there can be many pixels having same luminance, so, other constraints are also needed to obtain a unique solution \citep{dis_review}. 
 
-Finding  \textbf{\textit{Optical Flow}} between two consecutive frame is another method for motion estimation. Optical flow is the distribution of apparent velocities of movement of brightness patterns in an image \citep{horn1981determining}. This gives us important information about the spatial arrangement of the objects viewed and the rate of change of this arrangement \citep{gibson1977analysis}. Using this information, relative motions can be estimated between consecutive image frames. These relative motions can be used for camera pose estimation. Many modern neural network based optical flow algorithms have also been developed recently and are used in image stabilization tasks \citep{deep_opti_stab}. Although this method can give us good results, but, it has very high computational requirements and thus can be very slow.
+Finding  \textbf{\textit{Optical Flow}} between two consecutive frame is another method for motion estimation. Optical flow is the distribution of apparent velocities of movement of brightness patterns in an image \citep{horn1981determining}. This gives us important information about the spatial arrangement of the objects viewed and the rate of change of this arrangement \citep{gibson1977analysis}. Using this information, relative motions can be estimated between consecutive image frames. These relative motions can be used for camera motion estimation. Many modern neural network based optical flow algorithms have also been developed recently and are used in image stabilization tasks \citep{deep_opti_stab}. Although this method can give us good results, but, it has very high computational requirements and thus can be very slow.
 
 \subsubsection{Block-Matching}
-Block matching techniques use blocks of pixels for motion estimation instead of finding correspondence between pixels of consecutive frames. This allows to remove some ambiguities that occur in pixel-based matching methods \citep{dis_review}. Block-matching approach offers a flexible trade-off between complexity, computational efficiency and accuracy \citep{dis_review}.
+Block matching techniques use blocks of pixels for motion estimation instead of finding correspondence between pixels of consecutive frames. This allows to remove some ambiguities that occur in pixel-based matching methods \citep{dis_review}. Block-matching approach offers a flexible trade-off between complexity, computational efficiency and accuracy \citep{dis_review} but relies heavily on unambiguous features in the image.
 
 \subsubsection{Feature-Matching (Tracking)}
 In these methods, the algorithm first selects the features that are easily recognisable and distinguishable. The motion is estimated by tracking only these features, so, this make them computationally less expensive. There are several feature tracking algorithms that are widely used in many computer vision applications.
@@ -121,23 +120,23 @@ In these methods, the algorithm first selects the features that are easily recog
 
 \paragraph{}\textbf{Speeded up robust features (SURF)} is inspired by SIFT but is faster \citep{dis_surf}. This technique is also widely used in feature selection and tracking for motion estimation.
 
-I discussed about motion estimation from images and the common theme here is feature detection (be it a pixel, or a group of pixels or any other particular image feature) and then tracking it for motion estimation. But, there are certain use cases like mine where feature tracking is very difficult or unreliable. There are also situations where the features in an image are moving in different directions, which makes reliable motion estimation using these techniques impossible. This is the case for my research and my goal is to estimate pose which in invariant to what image is being captured. For this purpose I have decided to use sensor based pose-estimation techniques.
+A common theme here in software based motion estimation techniques is to detect features (be it a pixel, or a group of pixels or any other particular image feature) and then tracking it for motion estimation. But, there are certain use cases like ours where feature tracking is very difficult or unreliable. The features in an image sequence can be moving in different directions, which makes reliable motion estimation using these techniques impossible. This is the case for this work and the goal is to \textit{estimate motion using technique which is image invariant}. To achieve this we decided to use sensor based pose-estimation techniques.
 
-\subsection{Sensor based motion estimation techniques}
-Pose estimation is a huge are of research especially for the field of robotics and autonomous driving. There are various sensors like Accelerometers, Gyroscopes, Magnetometers and Satellite Navigation systems available. For camera pose estimation, generally Gyroscopes and Accelerometers are used. In combination, these two sensors are called Inertial Measure Unit Sensors. I will talk in depth about how these sensors are use for pose estimation in the next section of this report. For my research I will use this sensor for pose estimation as using it has many advantages. And it's use will make my stabilization algorithm image invariant which is highly desirable for my use case.
+\subsection{Sensor based Motion Estimation}
+Pose estimation is a huge are of research especially for the field of robotics and autonomous driving. There are various sensors like Accelerometers, Gyroscopes, Magnetometers and Satellite Navigation systems available. For camera pose estimation, generally Gyroscopes and Accelerometers are used. In combination, these two sensors are called \textit{Inertial Measure Unit (IMU) Sensors}. For this work, we will be using IMU for pose estimation as using it has many advantages and will make our image stabilization algorithm image invariant.
 
 % Start: IMU Sensors
 \section{Inertial Measurement Unit (IMU) Sensors}
 \label{sec:imu}
-IMU sensor is one of the most commonly used sensors in the world and present all around us in mobile devices, Virtual Reality gear and camera. It is very common to use IMU sensor for pose estimation. An IMU sensor measures acceleration(m/s²) and angular velocity (rad/s).  They can make these measurements in multiple degrees of freedom. For example, a 6-DoF IMU sensor includes a 3-axis accelerometer and 3 axis gyroscope  \citep{constant2021data}. The accelerometer will make independent acceleration measurements in let's say x, y and z directions. Similarly the gyroscope makes independent angular velocity measurements about these three axis.
+IMU sensor is one of the most commonly used sensors in the world and present all around us in mobile devices, virtual reality gear and camera. It is very common to use IMU sensor for pose estimation. An IMU sensor measures acceleration(m/s²) and angular velocity (rad/s).  They can make these measurements in multiple degrees of freedom e.g., a 6-DoF IMU sensor includes a 3-axis accelerometer (x, y, z) and 3 axis gyroscope (x, y, z)  \citep{constant2021data}. The accelerometer will make independent acceleration measurements in these axis. Similarly, the gyroscope makes independent angular velocity measurements about these three axis.
 
-IMU sensors are used in a wide variety of applications like navigation, robotics, drones, smart watches, sports learning, augmented reality systems, industrial quality control \citep{ahmad2013reviews}  and also for image stabilization in cameras. In all these applications, IMU sensor is used for pose estimation in some form; either for absolute pose estimation or change in pose. It is important to note that for my application here the IMU will be strapped on to the camera system. Which means the IMU sensor can has all 6 of its DoF.
+IMU sensors are used in a wide variety of applications like navigation, robotics, drones, smart watches, sports learning, augmented reality systems, industrial quality control \citep{ahmad2013reviews}  and also for image stabilization in cameras. In all these applications, IMU sensor is used for pose estimation in some form; either for absolute pose estimation or change in pose.
 
 There are a lot of reasons to use IMU sensors and these reasons are surely a very huge contributor to them being one of the most commonly used sensors in the world. Some of their qualities are \citep{woodman2007introduction}.:
 
 \begin{itemize}
 \item They have small size
-\item low weight,
+\item low weight
 \item rugged construction 
 \item low power consumption 
 \item cheap
@@ -147,7 +146,7 @@ There are a lot of reasons to use IMU sensors and these reasons are surely a ver
 \end{itemize}
 
 \subsection{Pose Estimation with IMUs}
-Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, roll) with respect to some reference coordinate system. To calculate pose of an object, we continuously take measurements from IMU and using some algorithm we estimate the pose. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noises and biases \citep{woodman2007introduction} which need to be accounted for.
+Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, roll) with respect to some reference coordinate system. To estimate pose of an object, we continuously take measurements from IMU and using some algorithm we estimate its pose. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noise and have a bias \citep{woodman2007introduction} which needs to be accounted for.
 
 \begin{figure}
 \includegraphics[scale=0.2]{images/fig_chapter2/strap_imu_algo.png}
@@ -156,7 +155,7 @@ Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, rol
 \end{figure}
 
 \subsection{IMU Noise Models}
-Sensor outputs are inherent to noise. There is different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: true signal, bias and white noise.
+MEMS sensor outputs are inherent to noise and there is different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: true signal, bias and white noise.
 
 \textbf{Gyroscope}
 \begin{equation}
@@ -174,40 +173,22 @@ Where $ \omega_{n}(t) $ is the noisy gyroscope signal, $ \omega(t) $ is the true
 
 Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the true accelerometer signal, $ b_{a}(t) $ is the accelerometer bias and $ n_{a} $ is the accelerometer white noise.
 
-For both gyroscope and accelerometer the signal can be independently modeled this way in each of its axis (x, y and z) \citep{imu_noise}. Although the modelling equation looks the same for both IMU and but they have different effects on pose estimation as the strap-down inertial algorithm suggests.
 
-To demonstrate the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise} a. \textbf{Bias} can be defined as constant offset \ref{fig:imu_noise}. If we add the bias to the true signal it will look something like as show in figure \ref{fig:imu_noise} b (right). Another component to the noisy signal is white noise. This can be modeled as random data with zero mean ($ \mu = 0 $) and some variance ($ \sigma^{2} $) and is shown in figure \ref{fig:imu_noise} b (right). Based on equations \ref{eqn:gyro_noise} and \ref{eqn:accel_noise} the bias and white noise will be added to the signal and it will look like as show in figure \ref{fig:imu_noise} c (right). 
+To visualise the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise}. \textbf{Bias} can be defined as constant offset from true signal value. White noise can be thought of as random fluctuations of equal intensity and different frequency from the true value of the signal (\ref{fig:imu_noise}).
 
 \begin{figure}
-
   \begin{subfigure}{\linewidth}
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/true_signal.pdf}\hfill
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/bias.pdf}
-  \caption{true Signal and bias}
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_with_bias.pdf}\hfill
+  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_with_bias_and_noise.pdf}
   \end{subfigure}\par\medskip
-  
-  \begin{subfigure}{\linewidth}
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_bias.pdf}\hfill
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/white_noise.pdf}
-  \caption{Signal with bias and white noise}
-  \end{subfigure}\par\medskip
-  
-  \begin{subfigure}{\linewidth}
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise.pdf}\hfill
-  \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_white_noise_bias.pdf}
-  \caption{Signal with white noise and signal with white noise and bias}
-  \end{subfigure}
-  
-  \caption{IMU Noise Model Demonstration}
-
+  \caption{IMU Noise Model Visualisation}
 \label{fig:imu_noise}
 \end{figure}
 
-As you can see from the plots, the noisy signal looks very different from the true signal. Using the noisy signal directly for pose estimation can lead to very inaccurate results. There are various signal processing techniques/algorithms which can be used to mitigate this issue and will be discussed in the upcoming sections of this report.
+For both gyroscope and accelerometer the signal can be independently modeled this way in each of its axis (x, y and z) \citep{imu_noise}. As you can see from the plots, the noisy signal looks very different from the true signal. Using the noisy signal directly for pose estimation can lead to very inaccurate results. Although the modelling equation looks the same for both gyroscope and accelerometer, but they have different effects on pose estimation as the strap-down inertial algorithm suggests. So, there are different challenges associated with position and orientation estimation using this sensor with absolute position estimation being especially hard.
 
 \subsubsection{Gyro Error Characteristics}
 To get orientation from the gyroscope, the readings need to be integrated once and the global orientation needs to be updated. This needs to be done for each of the gyroscope axis. Doing this continuously with the noisy signal will result into erroneous  orientation tracking if nothing is done about the noise. In table \ref{tab:imu_error_char} you can see all the errors and effect of those on orientation measurement.
-
 
 \subsubsection{Accelerometer Error Characteristics}
 Generating position information from accelerometer is not a single step like in case of Gyroscope. Based the strap-down inertial navigation algorithm shown in figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to projected into the global axis using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
@@ -215,27 +196,27 @@ Generating position information from accelerometer is not a single step like in 
 So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:imu_error_char} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
 % imu error table
-\begin{table}[ht]
+\begin{table}[ht!]
 \centering
 \begin{tabular}{ l| L| L }
      Error Type & Description & Result of Single/Double Integration \\ 
      \hline
      Accel Bias & 
-     A constant Bias epsilon & 
+     A constant Bias $ \epsilon $ & 
      Steadily growing angular error.  \[\theta(t) = \epsilon(t)\] \\
      \hline
      Accel White Noise & 
-     White noise with some standard deviation sigma & 
+     White noise with some standard deviation $ \sigma $ & 
      An angular random walk, whose standard deviation grows with the square root of time. 
      \[\sigma_\theta(t) = \sigma \sqrt{\delta t}\] \\
      
      \hline
      Gyro Bias & 
-     A constant Bias epsilon in the accelerometer's output signal. & 
+     A constant Bias $ \epsilon $ in the accelerometer's output signal. & 
      A quadratically growing position error. \[s(t) = \epsilon  \frac{t^{2}}{2}\]   \\
      \hline
      Gyro White Noise & 
-     White noise with some standard deviation sigma & 
+     White noise with some standard deviation $ \sigma $ & 
      A second order random walk. The standard deviation of the position error grows as
      \[\sigma_s(t) = \sigma  t^{\frac{3}{2}}  \sqrt{\frac{\sigma  t}{3}}\]   \\
      
@@ -245,9 +226,7 @@ So, there is double integration present in the algorithm. We also have a noisy s
 \end{table}
 
 \subsubsection{Challenges in Working with IMU}
-As you can see it is not straightforward to work with IMUs, especially for absolute position estimation as the errors introduced are squared with time. This results in a \textbf{drift} from actual position, which for any image stabilization algorithm is very detrimental. Orientation estimation is still relatively reliable and is the main reason why Gyroscope based hardware as well as digital image stabilization is more common. 
-
-These issues presents a lot of challenges especially for our case, as we require a precision in the range 0.1 mm. So, the sensor readings cannot be used directly in the inertial navigation algorithm. Generally some basic (Low pass, moving average filter) and advanced signal processing techniques and algorithms like Madgwick, Kalman Filter and its other versions are used to estimate the pose using IMU. These techniques may be good enough for some other applications, but in our case their use is not enough. The precision requirements are very high. Even with the use of these algorithms, there is still a drift present which is unacceptable for this use case. In the next section I will discuss about pose estimation using IMU sensors.
+For the reasons mentioned in the previous sections, it is not straightforward to work with IMUs, especially for absolute position estimation as the errors introduced are squared with time. This results in a \textbf{drift} from actual position, which for any image stabilization algorithm is very detrimental. Orientation estimation is still relatively reliable and is the main reason why Gyroscope based hardware as well as digital image stabilization is more common.
 
 % Start: Pose Estimation
 \section{Pose Estimation using IMU}
@@ -280,7 +259,7 @@ We can very comfortably conclude that using the inertial navigation system in it
 But modern learning based methods do not use these equations. Instead they are more data driven and let the neural network infer these relations based on the training data.
 
 \subsection{Classical Techniques}
-IMUs have been used extensively for pose estimation for the better half of the century and were used to track the Apollo 11 rocket that took man to the mars. Various filtering based and Sensor Fusion based algorithms exists to reduce the drift in pose estimation. 
+IMUs have been used extensively for pose estimation for the better half of the century and were used to track the Apollo 11 rocket that took man to the mars. Over the years many techniques and algorithms have been developed to improve pose-estimation accuracy using IMU. These techniques range from simple signal filtering to more advanced state-estimation algorithms.
 
 \subsubsection{Signal Filtering}
 There are also various signal-processing techniques that can be used to reduce the white noise. Noise can be characterised as a high-frequency content in any signal. Therefore, we can use simple filters like a low pass filter or a moving average filter with big horizon to eliminate the noise up to some extent. These techniques are in no way perfect and may even cause loss of true signal if not configured properly.
@@ -288,22 +267,17 @@ There are also various signal-processing techniques that can be used to reduce t
 \subsubsection{Kalman Filter}
 Kalman filters are very useful for estimation purposes. They can be used to estimate pose using an IMU sensor by filtering noise based on a covariance matrix \citep{ferdinando2012embedded}. The values of this covariance matrix can be varied but there is a trade-off between noise sensitivity and accuracy. Kalman filter is used to fuse multiple sensors to improve the accuracy of estimation. But in our case the accuracy it provides over time is not enough and hence cannot be used.
 
+These techniques may be good enough for some other applications, but in our case their use is not enough. The precision requirements are very high. Even with the use of these algorithms, there is still a drift present which is unacceptable for this use case.
+
 \subsection{Neural Network Based}
-With the advancement of neural networks and their ability to outperform classical algorithms, over the years many techniques have been developed to solve the challenge of double integrating accelerometer readings. Based on the fact that the vibrations in our camera setup have similar characteristics and patterns, a neural network can learn that pattern and make accurate predictions. Some of the techniques which laid the foundation of the methodology we used are discussed in the next sections.
+With the advancement of neural networks and their ability to outperform classical algorithms, over the years many techniques have been developed to solve the challenge of double integrating accelerometer readings. Based on the fact that the vibrations in our camera setup have similar characteristics and patterns, a neural network can learn that pattern and make accurate predictions. Some of the techniques which laid the foundation of the methodology we used are discussed in chapter \ref{chapter_three} of this report.
 
-\subsubsection{RIDI: Robust IMU Double Integration}
-RIDI was the first data-driven neural network approach which tackles the challenges of double integrating accelerometer readings. The algorithm regresses a velocity vector from the history of linear accelerations and angular velocities (IMU windows - discussed in section \ref{sec:data_structure}), then corrects low-frequency bias in the linear accelerations, which are integrated twice to estimate position \citep{yan2018ridi}. The analysis of results manifested that this algorithm outperformed the heuristic-based methods and even came closer to visual inertial navigation \citep{yan2018ridi}. The issue with this is it can only regress position and orientation estimation needs to be achieved using classical algorithms.
-
-\subsubsection{RoNIN: Robust Neural Inertial Navigation in the Wild}
-Developed by the same team as RIDI, RoNIN uses more advanced neural network architectures like ResNet, LSTM and TCN as its backbone to regress a velocity vecotor given a window of IMU samples \citep{herath2020ronin}. Using these architectures and increasing the quality and size of data RoNIN outperforms RIDI and sets a new benchmark for inertial navigation. Out methodology is hugely infleuenced by this technique and is discussed in chapter \ref{chapter_four} of this report.
-\subsubsection{CTIN: Robust Contextual Transformer Network for Inertial Navigation}
-This algorithm takes advantage of the recent advances in deep learning by using Multi-Headed-Attention (MHA) mechanism introduced in \citep{vaswani2017attention}. It uses a ResNet based encoder enhanced by local and global MHA to capture spatial contextual information from IMU measurements \citep{rao2022ctin}. CTIN is claimed to be robust and to outperform state-of-the-art models but cannot be evaluated as it is not available publicly.
 
 \section{Neural Network Architectures}
 The evolution of neural networks and deep learning techniques over the past decade has made the use data driven approaches very common in overcoming challenges. Data driven approaches have surpassed classical techniques in many applications. There are various neural network architectures, their variations and combinations present today. Each of these architectures have properties that aid in achieving solutions for various challenges.
 
 \subsection{Multi Layer Perceptron (MLP)}
-MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural Networks (DNNs) and are made of a combination of perceptrons/neurons (figure \ref{fig:perceptron}). An MLP has at-least three layers; an input-layer, a hidden layer and an output-layer as shown in figure \ref{fig:mlp}. The network learns by changing weights of its layers with the forward and backward pass using some optimization algorithm (gradient descent). These networks act as universal function approximators \citep{cybenko1989approximation} and therefore are used to create mathematical models by regression analysis. We will be using MLPs as Fully Connected (FC) layers in all of our networks for this purpose.
+MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural Networks (DNNs) and are made of a combination of perceptrons/ neurons (figure \ref{fig:perceptron}). An MLP has at-least three layers; an input-layer, a hidden layer and an output-layer as shown in figure \ref{fig:mlp}. The network learns by changing weights of its layers with the forward and backward pass using some optimization algorithm (gradient descent). These networks act as universal function approximators \citep{cybenko1989approximation} and therefore are used to create mathematical models by regression analysis. We will be using MLPs as Fully Connected (FC) layers in all of our networks for this purpose.
 
 \begin{figure}
     \centering
@@ -322,8 +296,6 @@ MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural N
 \subsection{Convolutional Neural Networks (CNNs)}
 CNNs are another class of ANNs and are responsible for revolutionising the field computer vision and has applications in Natural Language Processing, Recommender Engines and Time Series. These networks also have neurons that self-optimise through learning \citep{cnn2015introduction}. These networks are capable of learning multiple features from the data by abstracting the data into feature maps. In our case we input a 6 channel (3-accelerometer and 3-gyroscope) data and then the CNNs take the data from 6 channels to 64 channels (feature maps). Then these features are fed into the Fully Connected Layers (FC / MLP) at the end to regress the pose as shown in figure \ref{fig:cnn_fc}. This also results in reducing dimensionality of the data while regressing the output. 
 
-Receptive field
-
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{images/fig_chapter2/nns/cnn_mlp.png}
@@ -331,7 +303,7 @@ Receptive field
     \label{fig:cnn_fc}
 \end{figure}
 
-\section{Transformers}
+\subsection{Transformers}
 Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of the latest proposed neural network architectures that has outperformed its predecessors. Its use mainly started for natural language processing \citep{vaswani2017attention} but was also adopted for computer vision \citep{dosovitskiy2020image}. The use of transformers is also extended for Inertial based Human Activity Recognition (HAR) \cite{shavit2021boosting} and Inertial Navigation \citep{rao2022ctin}. This architecture adopts Multi Headed Attention Mechanism (MHA) \citep{vaswani2017attention} which results in weighing the significance of each part of input data. This significantly improves performance of the network as it learns the importance of each feature and can look at the bigger picture from the data.
 
 \begin{figure}
@@ -355,5 +327,5 @@ Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of
     \label{fig:transformer_cnn}
 \end{figure}
 
-\subsubsection{Conclusion}
+
 In this chapter we discussed different methods for image stabilization, challenges of pose-estimation  and which methods are available to estimate pose from MEMS IMUs. The next chapter summaries some state of the art techniques used to solve the challenges we are facing.

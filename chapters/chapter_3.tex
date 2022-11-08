@@ -22,19 +22,13 @@ Using both Accelerometer and Gyroscope readings for DIS.
 \label{sec:sota_pose_est}
 For stabilisation to be accurate we need to estimate the position and orientation or change in it with high accuracy. So, we will need to use modern techniques for that like ANNs. We will also discuss shortcomings of classical algorithms.
 
-\subsection{Kalman Filtering}
-Position and Orientation estimation while using a Kalman Filter for IMU readings.
+\subsection{RIDI: Robust IMU Double Integration}
+RIDI was the first data-driven neural network approach which tackles the challenges of double integrating accelerometer readings. The algorithm regresses a velocity vector from the history of linear accelerations and angular velocities (IMU windows - discussed in section \ref{sec:data_structure}), then corrects low-frequency bias in the linear accelerations, which are integrated twice to estimate position \citep{yan2018ridi}. The analysis of results manifested that this algorithm outperformed the heuristic-based methods and even came closer to visual inertial navigation \citep{yan2018ridi}. The issue with this is it can only regress position and orientation estimation needs to be achieved using classical algorithms.
 
-\subsection{RIDI}
-Robust Inertial Double Integration
+\subsection{RoNIN: Robust Neural Inertial Navigation in the Wild}
+Developed by the same team as RIDI, RoNIN uses more advanced neural network architectures like ResNet, LSTM and TCN as its backbone to regress a velocity vecotor given a window of IMU samples \citep{herath2020ronin}. Using these architectures and increasing the quality and size of data RoNIN outperforms RIDI and sets a new benchmark for inertial navigation. Out methodology is hugely infleuenced by this technique and is discussed in chapter \ref{chapter_four} of this report.
+\subsection{CTIN: Robust Contextual Transformer Network for Inertial Navigation}
+This algorithm takes advantage of the recent advances in deep learning by using Multi-Headed-Attention (MHA) mechanism introduced in \citep{vaswani2017attention}. It uses a ResNet based encoder enhanced by local and global MHA to capture spatial contextual information from IMU measurements \citep{rao2022ctin}. CTIN is claimed to be robust and to outperform state-of-the-art models but cannot be evaluated as it is not available publicly.
 
-\subsection{RoNIN}
-Robust Neural Inertial Navigation
-
-\subsection{TLIO}
-Tight Learned Inertial Odometry
-
-\subsection{Transformers}
-Transformers for pose estimation.
 
 
