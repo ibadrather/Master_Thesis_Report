@@ -9,7 +9,15 @@ Image stabilization is a key technology to produce  good quality photographs and
 
 On microscopic level, the stabilization of videos becomes even more important as even small movements can cause large pixel shifts in the image plane. This can be seen by zooming in on your camera while trying to keep it stable. The effect of magnification becomes more evident and it will become increasingly more difficult to keep the image smooth and stable as the movements are magnified as well. This happens because at a microscopic level the movements are also magnified. This will deteriorate the video quality and is very important to deal with. 
 
-Microscopic movements are the scope of this work. A modified GoPro Hero 10 camera is used as it allows to extract synchronized sensor and video data. The wide angle fisheye lens of the GoPro was exchanged with a narrow field-of-view lens that has a very large focal length. Switching the lens resulted in the default stabilisation provided by GoPro (HyperSmooth) to not work anymore. The goal of this work is to explore different methods to obtain a stabilised video stream for large focal length lenses.
+Microscopic movements are the scope of this work. A modified GoPro Hero 10 (figure \ref{fig:gopro_hero10}) camera is used as it allows to extract synchronized sensor and video data. The wide angle fisheye lens of the GoPro was exchanged with a narrow field-of-view lens that has a very large focal length. Switching the lens resulted in the default stabilisation provided by GoPro (HyperSmooth) to not work anymore. The goal of this work is to explore different methods to obtain a stabilised video stream for large focal length lenses.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.1]{images/fig_chapter1/gopro_hero10.png}
+    \caption{GoPro Hero 10}
+    \label{fig:gopro_hero10}
+\end{figure}
+
 
 %\begin{itemize}
 %\item Why am I doing this?
@@ -26,7 +34,7 @@ Microscopic movements are the scope of this work. A modified GoPro Hero 10 camer
 
 
 \section{Challenges of the Work}
-For this work, an Inertial Measurement Unit (IMU) sensor will be used to stabilise the magnified video. The reasons for choosing this are discussed in the next section of this report. Doing this is challenging and requires the use of some of the state of the art neural network based techniques present today. Some of the challenges that were faced for this work and the requirements are as follows:
+For this work, an Inertial Measurement Unit (IMU) sensor will be used to stabilise the magnified video. This presents many challenges and requires the use of the state of the art neural network based techniques present today. Some of the challenges that were faced for this work and the requirements are as follows:
 
 \begin{itemize}
 \item Sensors are inherent to noise and this especially makes working with an IMU difficult because for position estimation we need to double integrate the signal. This double integration of the noisy signal causes a \textbf{drift} which is very undesirable for any image stabilization algorithm. 

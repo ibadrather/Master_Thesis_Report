@@ -23,7 +23,7 @@ The goal of each of these stabilization techniques is to estimate the motion or 
 \subsubsection{Hardware Image Stabilisation (HIS)}
 Hardware image stabilization at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilised by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. After the motions have been counter-acted upon, images are captured which results in a stabilized video output as seen in figure \ref{fig:his}. These methods although mostly effective are not perfect and have both advantages and disadvantages.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{images/fig_chapter2/2_1_his.pdf}
 \caption{Hardware Image Stabilization}
@@ -51,7 +51,7 @@ Hardware image stabilization at its core means moving the lens or the image sens
 \subsubsection{Digital Image Stabilisation (DIS)}
 Digital Image Stabilization also called Digital Video Stabilization (DVS) is a software based image stabilization technique \citep{dis_review}. The technique here is similar what is done is HIS i.e. first motion of the camera is estimated (pose-estimation) and based on this, the image is stabilized. The difference here is that after pose estimation is done, instead of moving around the hardware a suitable transformation (warping) is applied to the image \citep{dis_feat_track} as shown is figure \ref{fig:dis}. The resulting stabilized image (video) is motionless irrespective of the camera motions. DIS is be a very powerful technique but like other methods and techniques, it has its advantages and disadvantages.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{images/fig_chapter2/2_1_dis.pdf}
 \caption{Digital Image Stabilization}
@@ -84,7 +84,7 @@ Now we know that for any type of image stabilization motion estimation is fundam
 \label{sec:pose_estimation}
 Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques/algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on these camera motions we can stabilize a video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor based and software based techniques exist as show in figure \ref{fig:cam_pose_est}.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{images/fig_chapter2/cam_pose_estimation.pdf}
 \caption{Camera Motion/Pose Estimation Techniques}
@@ -148,7 +148,7 @@ There are a lot of reasons to use IMU sensors and these reasons are surely a ver
 \subsection{Pose Estimation with IMUs}
 Pose for any object is its position(x, y, z) and its orientation(yaw, pitch, roll) with respect to some reference coordinate system. To estimate pose of an object, we continuously take measurements from IMU and using some algorithm we estimate its pose. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noise and have a bias \citep{woodman2007introduction} which needs to be accounted for.
 
-\begin{figure}
+\begin{figure}[H]
 \includegraphics[scale=0.2]{images/fig_chapter2/strap_imu_algo.png}
 \caption{Strap-down inertial navigation algorithm \citep{woodman2007introduction}}
 \label{fig:strapdown_imu}
@@ -176,7 +176,7 @@ Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the true accel
 
 To visualise the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise}. \textbf{Bias} can be defined as constant offset from true signal value. White noise can be thought of as random fluctuations of equal intensity and different frequency from the true value of the signal (\ref{fig:imu_noise}).
 
-\begin{figure}
+\begin{figure}[H]
   \begin{subfigure}{\linewidth}
   \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_with_bias.pdf}\hfill
   \includegraphics[width=.5\linewidth]{images/fig_chapter2/noise_figs/signal_with_bias_and_noise.pdf}
@@ -196,7 +196,7 @@ Generating position information from accelerometer is not a single step like in 
 So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:imu_error_char} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
 % imu error table
-\begin{table}[ht!]
+\begin{table}[H]
 \centering
 \begin{tabular}{ l| L| L }
      Error Type & Description & Result of Single/Double Integration \\ 
@@ -232,7 +232,7 @@ For the reasons mentioned in the previous sections, it is not straightforward to
 \section{Pose Estimation using IMU}
 Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdown_imu}) and Newtonian mechanics, pose can be estimated from the IMU readings using equation \ref{eqn:ori_imu_readings} and equation \ref{eqn:pos_imu_readings}. We need a history of pose for the iterative pose estimation to work. $ \omega $ and $ a $ are the gyroscope and accelerometer readings respectively as defined in section \ref{sec:imu}.
 
-\begin{equation}
+\begin{equation}[H]
   \label{eqn:ori_imu_readings}
   \begin{aligned}
     O(t) = O(t - dt) exp(\int_{t-dt}^{t} \Omega(t) dt) \\
@@ -241,7 +241,7 @@ Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdow
 
  Orientation $ O(t) $ is the updated orientation in global frame at current timestamp using orientation at previous timestamp $ O(t - dt) $  and the sensor readings $ \Omega(t) $ as shown in equation \ref{eqn:ori_imu_readings}.
 
-\begin{equation}
+\begin{equation}[H]
   \label{eqn:pos_imu_readings}
   \begin{gathered}
     a_g(t) = O(t).a(t) \\
@@ -279,16 +279,16 @@ The evolution of neural networks and deep learning techniques over the past deca
 \subsection{Multi Layer Perceptron (MLP)}
 MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural Networks (DNNs) and are made of a combination of perceptrons/ neurons (figure \ref{fig:perceptron}). An MLP has at-least three layers; an input-layer, a hidden layer and an output-layer as shown in figure \ref{fig:mlp}. The network learns by changing weights of its layers with the forward and backward pass using some optimization algorithm (gradient descent). These networks act as universal function approximators \citep{cybenko1989approximation} and therefore are used to create mathematical models by regression analysis. We will be using MLPs as Fully Connected (FC) layers in all of our networks for this purpose.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{images/fig_chapter2/nns/perceptron.png}
     \caption{Perceptron}
     \label{fig:perceptron}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{images/fig_chapter2/nns/mlp.png}
+    \includegraphics[scale=0.3]{images/fig_chapter2/nns/mlp.png}
     \caption{Multi Layer Perceptron}
     \label{fig:mlp}
 \end{figure}
@@ -296,7 +296,7 @@ MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural N
 \subsection{Convolutional Neural Networks (CNNs)}
 CNNs are another class of ANNs and are responsible for revolutionising the field computer vision and has applications in Natural Language Processing, Recommender Engines and Time Series. These networks also have neurons that self-optimise through learning \citep{cnn2015introduction}. These networks are capable of learning multiple features from the data by abstracting the data into feature maps. In our case we input a 6 channel (3-accelerometer and 3-gyroscope) data and then the CNNs take the data from 6 channels to 64 channels (feature maps). Then these features are fed into the Fully Connected Layers (FC / MLP) at the end to regress the pose as shown in figure \ref{fig:cnn_fc}. This also results in reducing dimensionality of the data while regressing the output. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{images/fig_chapter2/nns/cnn_mlp.png}
     \caption{CNN layers with FC layers}
@@ -306,21 +306,21 @@ CNNs are another class of ANNs and are responsible for revolutionising the field
 \subsection{Transformers}
 Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of the latest proposed neural network architectures that has outperformed its predecessors. Its use mainly started for natural language processing \citep{vaswani2017attention} but was also adopted for computer vision \citep{dosovitskiy2020image}. The use of transformers is also extended for Inertial based Human Activity Recognition (HAR) \cite{shavit2021boosting} and Inertial Navigation \citep{rao2022ctin}. This architecture adopts Multi Headed Attention Mechanism (MHA) \citep{vaswani2017attention} which results in weighing the significance of each part of input data. This significantly improves performance of the network as it learns the importance of each feature and can look at the bigger picture from the data.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.35]{images/fig_chapter2/nns/transformer_arch.png}
     \caption{Transformer Architecture}
     \label{fig:transformer_arch}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{images/fig_chapter2/nns/mha_img_original.png}
     \caption{Multi Headed Attention}
     \label{fig:mha}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.7]{images/fig_chapter2/nns/transformer_cnn.pdf}
     \caption{CNN-Transformer}
