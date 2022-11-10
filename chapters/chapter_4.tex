@@ -553,3 +553,40 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
 \end{table} %%%%
 
 
+This chapter contained all the steps we took and the techniques we used to successfully realise image invariant digital image stabilization using IMU sensor. We examined various neural network architectures for pose-estimation and as expected more modern architectures outperformed the older neural network architectures. Importance of processing neural network outputs to further improve stabilization was also discussed. 
+
+
+\section{Results and Discussion}
+This section includes a brief overview of everything we have done and the results we have achieved.
+
+\begin{itemize}
+    \item Digital Image stabilization was chosen to stabilize the video for our use case as hardware stabilization is expensive and bulky with a lot of moving parts.
+
+    \item Camera motion estimation was achieved using MEMS IMU sensor due its low price and high reliability.
+
+    \item Use of MEMS IMUs present a huge challenge in accurate pose estimation as the noise characteristics of IMU along with the use of classical inertial navigation algorithm makes it impossible to accurately estimate pose accurately. Even the use of advanced state estimation algorithms is futile.
+
+    \item Both real world and simulated data was collected to train the neural networks and test the image stabilization algorithm.
+
+    \item Data-driven approaches like RoNIN(CNN and ResNet) were tested to estimate camera pose accurately and showed promising results over classical approaches.
+
+    \item More advanced self-attention based neural network architectures were used (CNN-Transformer) which improved the accuracy of stabilization trajectory estimation to a very high level.
+
+    \item This resulted into very good IMU based digital image stabilization.
+
+    \item Outputs from the neural networks were not smooth causing some jitter in the stabilized video.
+
+    \item Exponential moving average filter was used on neural network outputs to smoothen the predicted trajectory and improve the quality of video stabilization even more.
+
+\end{itemize}
+
+
+\subsection{Future Work}
+\begin{itemize}
+    \item Adapt this stabilization technique to high field of view and low focal length camera setups.
+
+    \item Explore lean neural network architectures to obtain similar results with low latency networks that are deploy-able on cheaper hardware.
+
+    \item Figure out way to use semi-supervised or unsupervised learning techniques to eliminate the hassle of ground truth generation.
+    
+\end{itemize}
