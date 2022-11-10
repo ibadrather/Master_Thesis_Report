@@ -11,7 +11,7 @@ So far we have discussed the problem we are trying to solve, what are the method
 
 \begin{figure}[H]
     % \centering
-    \includegraphics[scale=0.6]{images/fig_chapter4/dis_pipleline.pdf}
+    \includegraphics[scale=0.58]{images/fig_chapter4/dis_pipleline.pdf}
     \caption{DIS pipeline using IMU Sensor}
     \label{fig:dis_pipeline}
 \end{figure}
@@ -432,12 +432,12 @@ Where $ y_t $ is the smoothened signal and $ y_{t-1} $ is the smoothened signal 
     \label{fig:rough_mo_smooth_mo}
 \end{figure}
 
-\begin{sidewaysfigure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.78]{images/fig_chapter4/dis_smooth_pipeline.pdf}
     \caption{DIS Pipeline with Trajectory Smoothening}
     \label{fig:dis_smooth_pipeline}
-\end{sidewaysfigure}
+\end{figure}
 
 \section{Warping Grid Estimation}
 In our \textit{Digital Image Stabilization Pipeline} (figure \ref{fig:dis_pipeline}) after getting the relative pose from stabilization trajectory, we need to estimate the warping grid. This warping grid is applied to the image coming from the camera with a crop-ratio of 95 percent (5 percent of the image area will be cropped). These series of warped images based on the pose estimated results into the output stabilized video. 
@@ -499,10 +499,10 @@ Another recent approach is to convert the model to \textbf{half-precision} (16-b
 \subsubsection{Making Models Lean}
 The field of deep-learning is growing at a very high rate and we have a large selection of various neural network architectures some even with more than 100 Billion trainable parameters. But while developing deep-learning models, our goal should be to use models with the lowest number of parameters and complex layers while keeping the performance acceptable. The smaller the model is the better its inference latency. 
 \subsection{Model Inference Latency on various Hardware}
-Various trained models (CNN, ResNet and Transformer) are checked for inference latency and the results are summarised in table x. Models were also quantized or converted to ONNX for deployment. The models were inferred 1000 times and the result in the table is an average.
+Various trained models (CNN, ResNet and Transformer) are checked for inference latency and the results are summarised in table \ref{tab:model_inference}. Models were also quantized or converted to ONNX for deployment. The models were inferred 1000 times and the result in the table is an average.
 
 % Sim Vibration characteristics
- \begin{table}[ht]
+ \begin{table}[H]
 \centering
 \begin{tabular}{ l | L | L | L }
     
@@ -544,10 +544,7 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
     ONNX (.onnx)  & 
     00  &
     00  \\
-    
-    
-      
-    
+
     \hline
    
 \end{tabular}

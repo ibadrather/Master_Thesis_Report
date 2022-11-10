@@ -93,6 +93,7 @@ Camera motion (pose) estimation is very important and one of the most challengin
 
 
 \subsection{Software based motion estimation techniques}
+\label{sec:software_motion_estimation}
 Software based motion estimation techniques/algorithms use the images (frames) coming from the camera for motion estimation and subsequently for stabilization. Some of these software based techniques are listed below \citep{dis_review}:
 
 \begin{itemize}
@@ -308,7 +309,7 @@ Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{images/fig_chapter2/nns/transformer_arch.png}
+    \includegraphics[scale=0.5]{images/fig_chapter2/nns/transformer_arch.png}
     \caption{Transformer Architecture}
     \label{fig:transformer_arch}
 \end{figure}
@@ -320,12 +321,12 @@ Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of
     \label{fig:mha}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.7]{images/fig_chapter2/nns/transformer_cnn.pdf}
-    \caption{CNN-Transformer}
-    \label{fig:transformer_cnn}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.7]{images/fig_chapter2/nns/transformer_cnn.pdf}
+%     \caption{CNN-Transformer}
+%     \label{fig:transformer_cnn}
+% \end{figure}
 
 
 In this chapter we discussed different methods for image stabilization, challenges of pose-estimation  and which methods are available to estimate pose from MEMS IMUs. The next chapter summaries some state of the art techniques used to solve the challenges we are facing.
