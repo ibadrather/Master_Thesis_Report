@@ -304,7 +304,7 @@ In classical pose-estimation techniques, every single IMU sample is used individ
 \end{figure}
 
 \section{Training and Testing of Various Neural Networks}
-Various neural networks architectures were trained and tested to accurately estimate the camera pose with respect to a stabilised trajectory. Network takes as input the sensor readings coming from an IMU and the network is trained against the deviation with respect to stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in figure \ref{fig:stab_traj_ideal}. 
+Various neural networks architectures were trained and tested to accurately estimate the camera pose with respect to a stabilized trajectory. Network takes as input the sensor readings coming from an IMU and the network is trained against the deviation with respect to stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in figure \ref{fig:stab_traj_ideal}. 
 
 \begin{figure}
     \centering
@@ -352,17 +352,15 @@ Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 
 \subsection{ResNet}
 Convolution neural network having \textbf{Residual Skip Connections} with six \textbf{1D-Convolutional} Layers in sequence with \textbf{Batch Normalisation} and  \textbf{ReLU} activation is used to extract features from the input data. Then the output of these convolution layers is regularized using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{Linear} layers. 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.85]{images/fig_chapter2/nns/resnet_mt.pdf}
-    \caption{CNN with Residual Skip Connections}
-    \label{fig:resnet_used}
-\end{figure}
-
 \subsubsection{Model Output Analysis}
 Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds video three linear DoF (x, y, z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction is off and thus causes jitter in stabilization. The error in all DoF can be seen in figure \ref{fig:resnet_error}.
 
-NOTE: Still under development (Current ResNet model too bulky).
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{images/fig_chapter2/nns/resnet_mt.pdf}
+    \caption{CNN with Residual Skip Connections}
+    \label{fig:resnet_used}
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -427,7 +425,7 @@ Where $ y_t $ is the smoothened signal and $ y_{t-1} $ is the smoothened signal 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.41]{images/fig_chapter4/nn_related/rough_mo_smooth_mo.pdf}
+    \includegraphics[scale=0.5]{images/fig_chapter4/nn_related/rough_mo_smooth_mo.pdf}
     \caption{Smoothened model output vs raw model output}
     \label{fig:rough_mo_smooth_mo}
 \end{figure}
@@ -560,6 +558,12 @@ This chapter contained all the steps we took and the techniques we used to succe
 This section includes a brief overview of everything we have done and the results we have achieved.
 
 \begin{itemize}
+    \item We have a camera with small FOV high focal length lens which keeps vibrating on its rig after the rig is moved around the scene.
+
+    \item Vibrations are very small with a mean amplitude of 1.8mm but cause huge pixel shifts in the video recordings thus deteriorating the quality.
+
+    \item Our goal is to stabilize the video so that there is no visual discomfort for the viewer and quality of the scene is preserved.
+    
     \item Digital Image stabilization was chosen to stabilize the video for our use case as hardware stabilization is expensive and bulky with a lot of moving parts.
 
     \item Camera motion estimation was achieved using MEMS IMU sensor due its low price and high reliability.
