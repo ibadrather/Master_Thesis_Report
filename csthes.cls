@@ -199,7 +199,7 @@
 \newcommand*{\dateprefix@en}{Draft of}
 \newcommand*{\facultyat@en}{at}
 \newcommand*{\faculty@en}{Carl Zeiss AG, Jena, \\ 
-                        Corporate Research Department (CRT) \\ 
+                        Corporate Research Team (CRT) \\ 
                         and \\
                         Department of Mechatronics\\ 
                         Naturwissenschaftlich-Technische Fakult\"at}

@@ -1,0 +1,19 @@
+\chapter{Results and Discussion} \label{chapter_five}
+
+We had a camera with small FOV high focal length lens which keeps vibrating on its rig after the rig is moved around the scene. Vibrations are very small with a mean translational displacement amplitude of 1.8mm but cause huge pixel shifts in the video recordings thus deteriorating the quality. Our goal was to stabilize the video so that there is no visual discomfort for the viewer and quality of the scene is preserved.
+    
+Digital Image stabilization was chosen to stabilize the video for our use case as hardware stabilization is expensive and bulky with a lot of moving parts. A MEMS IMU was chosen for camera motion estimation due to its low price and high reliability. The use of MEMS IMUs presents a huge challenge in accurate pose estimation as the noise characteristics of IMU along with the use of classical inertial navigation algorithm makes it impossible to accurately estimate pose. Even the use of advanced state estimation algorithms is futile.
+
+Data-driven approaches like RoNIN(CNN and ResNet) were tested to estimate camera pose accurately and showed promising results over classical approaches. More advanced self-attention based neural network architectures were used (CNN-Transformer) which improved the accuracy of stabilization trajectory estimation to a very high level. Both real world and simulated data was collected to train the neural networks and test the image stabilization algorithm.
+
+Taking all these steps resulted into very good IMU based digital video stabilization. The networks were able to accurately estimate the stabilization trajectory (camera pose) and did not suffer from drift. Outputs from the neural networks were not smooth causing some jitter in the stabilized video. Exponential moving average filter was used on neural network outputs to smooth the predicted trajectory and improve the quality of video stabilization even more.
+
+\section{Future Work}
+\begin{itemize}
+    \item Adapt this stabilization technique to high field of view and low focal length camera setups.
+
+    \item Explore lean neural network architectures to obtain similar results with low latency networks that are deploy-able on cheaper hardware.
+
+    \item Figure out way to use semi-supervised or unsupervised learning techniques to eliminate the hassle of ground truth generation.
+    
+\end{itemize}

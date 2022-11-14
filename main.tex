@@ -64,8 +64,8 @@ using an \\ Inertial Measurement Unit}
 \author{Ibad Rather \matr{1532894}}
 
 \degree{MS Mechatronics}
-\supervisor{\\Company: Dr. Steffen Urban \\
-            University: Prof. Dr. Ing. Bhaskar Choubey}% most likely
+\supervisor{\\ University: Prof. Dr. Ing. Bhaskar Choubey \\Company: Dr. Steffen Urban 
+            }% most likely
 
 % Start of content
 \begin{document}
@@ -73,7 +73,7 @@ using an \\ Inertial Measurement Unit}
 \maketitle
 % Give a short summary of your thesis
 \begin{abstract}
-Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high  frame-rates $(\geq 120 fps).$ 
+Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high  frame-rates of up to 100 fps or more. 
 
 Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large $(\geq 50^\circ)$. In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods $(\leq 1s)$. 
 
@@ -101,7 +101,7 @@ This thesis should investigate and develop an image stabilization method for an 
 % 4. Chapter: ''Methods''
 \input{chapters/chapter_4}
 % 5. Chapter: ''Realisation and Evaluation''
-% \input{chapters/chapter_5}
+\input{chapters/chapter_5}
 
 % The chapters Introduction and Conclusions have NO sections
 % For the other chapters:

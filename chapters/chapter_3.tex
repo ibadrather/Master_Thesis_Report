@@ -1,8 +1,8 @@
-\chapter{State of Research} \label{chapter_three}
+\chapter{Literature Review} \label{chapter_three}
 
-Previous chapter laid out the foundations for image stabilization and motion estimation. We also made the case for the techniques and algorithms chosen for this work. Now, this chapter includes some of the state-of-the-art methods for digital image stabilization and pose estimation. 
+Previous chapter laid out the foundations for video stabilization and motion estimation. We also made the case for the techniques and algorithms chosen in this work. Now, this chapter includes some of the state-of-the-art methods for digital video stabilization and pose estimation. 
 
-\section{Digital Image Stabilization}
+\section{Digital Video Stabilization}
 Various sensor based digital image stabilization techniques have been developed over the years using both classical and data-driven approaches. These techniques are limited to rotational motion compensation or using image data.
 
 \subsection{5D Video Stabilization through Sensor Vision Fusion}
@@ -25,15 +25,15 @@ This work aims at stabilizing videos using \textit{Gyroscope} data as well as \t
     \label{fig:deep_stab}
 \end{figure}
 
-\section{Pose Estimation}
+\section{Inertial Pose Estimation}
 \label{sec:sota_pose_est}
-Classical algorithms fail to accurately estimate the pose using MEMS IMU over a long period of time. With the advancement of artificial neural networks (ANNs) and their architectures new data driven techniques have been developed for this purpose. These data-driven techniques have far outperformed their classical predecessors and are becoming a standard for this purpose. But with all these benefits they are computationally very expensive and have very high edge hardware requirements. 
+Classical algorithms fail to accurately estimate the pose using MEMS IMU over a long period of time. With the advancement of artificial neural networks (ANNs) and their architectures new data driven techniques have been developed for this purpose. These data-driven techniques have outperformed their classical predecessors and are becoming a standard for this purpose. The drawback is that they are computationally very expensive and have very high edge hardware requirements. 
 
 \subsection{RIDI: Robust IMU Double Integration}
 RIDI was the first data-driven neural network approach which tackles the challenges of double integrating accelerometer readings. The algorithm regresses a velocity vector from the history of linear accelerations and angular velocities (IMU windows - discussed in section \ref{sec:data_structure}), then corrects low-frequency bias in the linear accelerations, which are integrated twice to estimate position \citep{yan2018ridi}. The analysis of results manifested that this algorithm outperformed the heuristic-based methods and even came closer to visual inertial navigation \citep{yan2018ridi}. The issue with this is it can only regress position and orientation estimation needs to be achieved using classical algorithms.
 
 \subsection{RoNIN: Robust Neural Inertial Navigation in the Wild}
-Developed by the same team as RIDI, RoNIN uses more advanced neural network architectures like ResNet, LSTM and TCN as its backbone to regress a velocity vecotor given a window of IMU samples \citep{herath2020ronin}. Input to the network in this case are the angular rates (Gyroscope readings), accelerations (accelerometer readings) and device orientations as shown in figure \ref{fig:ronin} and the output is motion trajectory (poses). Using these architectures and increasing the quality and size of data RoNIN outperforms RIDI and sets a new benchmark for inertial navigation \citep{herath2020ronin}. Our methodology is hugely infleuenced by this technique and is discussed in chapter \ref{chapter_four} of this report.
+Developed by the same team as RIDI, RoNIN uses more advanced neural network architectures like ResNet, LSTM and TCN as its backbone to regress a velocity vecotor given a window of IMU samples \citep{herath2020ronin}. Input to the network in this case are the angular rates (Gyroscope readings), accelerations (accelerometer readings) and device orientations as shown in figure \ref{fig:ronin} and the output is motion trajectory (poses). Using these architectures and increasing the quality and size of data RoNIN outperforms RIDI and sets a new benchmark for inertial navigation \citep{herath2020ronin}. Our methodology is influenced by this technique and is discussed in chapter \ref{chapter_four} of this report.
 
 \begin{figure}[H]
     \centering
@@ -43,12 +43,12 @@ Developed by the same team as RIDI, RoNIN uses more advanced neural network arch
 \end{figure}
 
 \subsection{TLIO: Tightly Learned Inertial Odometry}
-This combines both classical and learn-based approaches by using an Extended Kalman Filter (EKF) and deep neural network (DNN). EKF is responsible for prediction step while outputs (displacement and uncertainty) from the neural network is used as measurement update. The filter estimates rotation, velocity, position and IMU biases at IMU rate \citep{hol2009tightly} as shown in figure \ref{fig:tlio}. We could not reproduce similar results as the research claimed using our datasets.
+This combines both classical and learn-based approaches by using an Extended Kalman Filter (EKF) and a deep neural network (DNN). The EKF is responsible for the prediction step while the outputs (displacement and uncertainty) from the neural network are used as a measurement update. The filter estimates rotation, velocity, position and IMU biases at IMU rate \citep{liu2020tlio} as shown in figure \ref{fig:tlio}. This approach is promising, but we were not able to reproduce the good results on our datasets, probably due to the difficult hyper-parameter settings that an EKF needs to perform well.
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{images/fig_chapter3/tlio.png}
-    \caption{TLIO architecture \citep{hol2009tightly}}
+    \caption{TLIO architecture \citep{liu2020tlio}}
     \label{fig:tlio}
 \end{figure}
 
