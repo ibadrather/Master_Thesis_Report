@@ -1,4 +1,4 @@
-\chapter{Work Methodology} \label{chapter_four}
+\chapter{Digital Video Stabilization using IMUs} \label{chapter_four}
 
 In the past chapters, the challenges associated and methods available were discussed. This chapter contains the process we used to digitally stabilize video for our use-case. This chapter now proposed methods to digitally stabilize videos with large focal lengths using inertial data for pose estimation alone. Figure \ref{fig:dis_pipeline} depicts a general flowchart of the the developed pipeline.
 
@@ -400,7 +400,7 @@ Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for
 
 %% CNN-Transformer
 \subsection{CNN-Transformer}
-The network is structured in a way that the input goes through four \textbf{1D-Convolutional Layers} in sequence with \textbf{GELU} activation (non-linear). The output from these convolutional layers is fed to the \textit{Transformer Encoder}. Transformer Encoder has six layers with each layer having \textbf{Multi Headed Attention}, \textbf{Dropout}, \textbf{GELU} and \textbf{Layer Norm}. The output from the encoder layer goes into the output layers consisting of \textbf{Layer Normalization}, \textbf{Linear} layer, \textbf{GELU} non-linearity, \textbf{Dropout} and finally a \textbf{Fully Connected} layer to regress the output pose.
+The network is structured in a way that the input goes through four \textbf{1D - Convolutional Layers} in sequence with \textbf{GELU} activation (non-linear). The output from these convolutional layers is fed to the \textit{Transformer Encoder}. Transformer Encoder has six layers with each layer having \textbf{Multi Headed Attention}, \textbf{Dropout}, \textbf{GELU} and \textbf{Layer Norm}. The output from the encoder layer goes into the output layers consisting of \textbf{Layer Normalization}, \textbf{Linear} layer, \textbf{GELU} non-linearity, \textbf{Dropout} and finally a \textbf{Fully Connected} layer to regress the output pose.
 
 \begin{figure}[H]
     \centering
@@ -550,7 +550,7 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
     
     CNN & 
     ONNX (.onnx)  & 
-    00  &
+    745,375   &
     -  \\
     
     ResNet & 

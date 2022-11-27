@@ -1,6 +1,18 @@
-\chapter{Fundamental Blocks} \label{chapter_two}
+\chapter{Building Blocks} \label{chapter_two}
 
-In the previous chapter I discussed the importance of Video Stabilization and the challenges associated performing it using an IMU sensor. This chapter discusses current techniques available to us and also we make a case for our chosen technique. Then we will also discuss in depth the challenges associated with IMU pose-estimation and how we can overcome those challenges. Fundamentals of neural networks and their applications will also be briefly conferred as they are a huge part of this work.
+In the first chapter, the importance of Video Stabilization and the challenges associated with it using an IMU sensor were discussed. This chapter discusses current video stabilisation techniques available to us. The first section explains both hardware and software based video stabilization techniques and details their advantages and disadvantages. It further makes a case for our chosen technique and explains how it was utilised. 
+
+In the second section, we explore the different techniques for motion estimation and examine whether or not they can be used for our purpose of video stabilisation.
+
+The third section discusses the characteristics of Inertial Measurement Unit (IMU) and the qualities which makes it the most widely used technique for pose estimation. It further explores IMU sensors and their challenges, including their noise models, effects of their inherent noise and reasons for the drift caused in them. 
+
+The fourth section explores how pose estimation can be done with the use of IMU. It discusses the classical techniques used for it and details their drawbacks. Lastly, it explains the use of neural networks for pose estimation due to their advancement and their ability to outperform the classical algorithms.
+
+The fifth section describes the different types of neural network architectures and their properties and explains how they can be used for IMU pose estimation. 
+
+Then we will also discuss in depth the challenges associated with IMU pose-estimation and how we can overcome those challenges. Fundamentals of neural networks and their applications will also be briefly conferred as they are a huge part of this work.
+
+
 
 \section{Video Stabilization}
 \label{sec:image_stab}
@@ -27,7 +39,7 @@ Hardware video stabilization at its core means moving the lens or the image sens
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{images/fig_chapter2/2_1_his.pdf}
+\includegraphics[scale=0.8]{images/fig_chapter2/2_1_his.pdf}
 \caption{Hardware Video Stabilization}
 \label{fig:his}
 \end{figure}
@@ -55,7 +67,7 @@ Digital Video Stabilization (DVS) is a software based video stabilization techni
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{images/fig_chapter2/2_1_dis.pdf}
+\includegraphics[scale=0.75]{images/fig_chapter2/2_1_dis.pdf}
 \caption{Digital Video Stabilization}
 \label{fig:dis}
 \end{figure}
@@ -84,11 +96,11 @@ Regardless of the type of video stabilization technique motion estimation is a f
 % Start: Motion Estimation
 \section{Motion Estimation for Image Stabilization}
 \label{sec:pose_estimation}
-Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques/algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on the actual, shaky camera motions, a smoothed trajectory can be calculated that will create a stabilized video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor and software based techniques exist as show in figure \ref{fig:cam_pose_est}.
+Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques / algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on the actual, shaky camera motions, a smoothed trajectory can be calculated that will create a stabilized video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor and software based techniques exist as show in figure \ref{fig:cam_pose_est}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{images/fig_chapter2/cam_pose_estimation.pdf}
+\includegraphics[scale=0.7]{images/fig_chapter2/cam_pose_estimation.pdf}
 \caption{Camera Motion/Pose Estimation Techniques}
 \label{fig:cam_pose_est}
 \end{figure}
@@ -154,13 +166,13 @@ There are a lot of reasons to use IMUs and these reasons are surely a very huge 
 In this thesis, a pose has six degrees of freedom and is defined by a position and a orientation with respect to some coordinate system. Continuous IMU readings are taken and using some algorithm pose is estimated. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noise and have a bias \citep{woodman2007introduction} which needs to be accounted for. In addition, integration of the accelerometer signal needs prior information like the initial velocity or the initial position that are, dependent on the application, not always easily obtainable.
 
 \begin{figure}[H]
-\includegraphics[scale=0.2]{images/fig_chapter2/strap_imu_algo.png}
+\includegraphics[scale=0.75]{images/fig_chapter2/strap_imu_algo.pdf}
 \caption{Strap-down inertial navigation algorithm \citep{woodman2007introduction}}
 \label{fig:strapdown_imu}
 \end{figure}
 
 \subsection{IMU Noise Models}
-MEMS sensor outputs are inherent to noise and there is different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: true signal, bias and white noise.
+Noise is inherent to MEMS sensor outputs and there are different types of noise with which we have to deal. For IMUs, the readings coming from a sensor could be modelled as a combination of three entities: true signal, bias and white noise.
 
 \textbf{Gyroscope}
 \begin{equation}
@@ -285,14 +297,14 @@ MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural N
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{images/fig_chapter2/nns/perceptron.png}
+    \includegraphics[scale=0.75]{images/fig_chapter2/nns/perceptron.pdf}
     \caption{Perceptron}
     \label{fig:perceptron}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{images/fig_chapter2/nns/mlp.png}
+    \includegraphics[scale=0.7]{images/fig_chapter2/nns/mlp.pdf}
     \caption{Multi Layer Perceptron}
     \label{fig:mlp}
 \end{figure}
@@ -332,4 +344,7 @@ Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of
 % \end{figure}
 
 
-In this chapter we discussed different methods for image stabilization, challenges of pose-estimation and which methods are available to estimate pose from MEMS IMUs. The next chapter summaries some state of the art techniques used to solve the challenges we are facing.
+In this chapter, we discussed the steps, techniques and algorithms involved in building image stabilisation pipeline. We explained the reasons for choosing particular algorithms such as using digital image stabilisation, the preference of IMU for pose estimation and the use of neural networks instead of classical techniques. After developing this foundation, in the next chapter we will explore state of the art methods and examine how they can be used and inspire our work.
+
+we discussed different methods for image stabilization, challenges of pose-estimation and which methods are available to estimate pose from MEMS IMUs. The next chapter summaries some state of the art techniques used to solve the challenges we are facing.
+

@@ -1,6 +1,6 @@
 \chapter{Introduction} \label{chapter_one}
 
-Cameras have become an integral part of our lives. We use cameras regularly, be it a smartphone camera, a hobbyist camera setup or professional cameras. Our demands for high quality media from cameras is also increasing constantly. We want sharper, color accurate, low lighting bright photographs. The videos are expected to capture scenes with as much realism as possible and we don't want too many movements in them irrespective of the way we capture them. If we are making a video capturing a beautiful sunrise or a landscape while walking, we do not want movements associated with walking in our video. We want it to be as smooth as possible. This is where \textit{Image Stabilization} comes into play. Its goal being producing a stable video irrespective of the camera movements during capture. Stabilization is a very important quality metric for videos. A video may have all the aspects of photography correct but if it has too many sudden movements it would not look good.
+Cameras have become an integral part of our lives. We use cameras regularly, be it a smartphone camera, a hobbyist camera setup or a professional camera. Our demand for high quality media from cameras is also increasing constantly. We want sharper, color accurate, low lighting bright photographs. The videos are expected to capture scenes with as much realism as possible and we don't want too many movements in them irrespective of the way we capture them. If we are making a video capturing a beautiful sunrise or a landscape while walking, we do not want movements associated with walking in our video. We want it to be as smooth as possible. This is where \textit{Image Stabilization} comes into play. Its goal being producing a stable video irrespective of the camera movements during capture. Stabilization is a very important quality metric for videos. A video may have all the aspects of photography correct but if it has too many sudden movements it would not look good.
 
 % Motivation
 \section{Motivation}
@@ -34,44 +34,42 @@ Microscopic movements are the scope of this work. A modified GoPro Hero 10 (figu
 
 
 \section{Challenges}
+We have a camera with small FOV high focal length lens which keeps vibrating on its rig. Vibrations are very small with a displacement of around 1.8mm but cause huge pixel shifts in the video recordings thus deteriorating the quality. Our goal is to stabilize the video so that there is no visual discomfort for the viewer and quality of the scene is preserved. We want to use an Inertial Measurement Unit (IMU) sensor to track these vibrations and stabilize the video based on it.
+
+Noise is inherent to sensors and IMUs are no different. This presents a lot of challenges in accurate camera motion estimation. There exist IMU sensors with better noise characteristics, however, those are very expensive ($ > $1000 Euros) and are difficult to buy as they usually have a tactical grade placing them under export restrictions. Hence, in this work a low-cost consumer \textbf{MEMS} (Microelectromechanical systems) IMU is used. 
+
+Use of IMUs for motion estimation for image stabilization presents many challenges including:
 
 \begin{itemize}
-\item We have a camera with small FOV high focal length lens which keeps vibrating on its rig after the rig is moved around the scene.
-
-\item Vibrations are very small with a mean amplitude of 1.8mm but cause huge pixel shifts in the video recordings thus deteriorating the quality.
-
-\item Our goal is to stabilize the video so that there is no visual discomfort for the viewer and quality of the scene is preserved.
-
-\item We want to use an Inertial Measurement Unit (IMU) sensor to track these vibrations and stabilize the video based on it.
-
-\item Sensors are inherent to noise and IMUs being no different present a lot of challenges in accurate camera motion estimation.
-
-\item There exist IMU sensors with better noise characteristics, however, those are very expensive (> 1000 Euros) and are difficult to buy as they usually have a tactical grade placing them under export restrictions. Hence, in this work a low-cost consumer MEMS (Microelectromechanical systems) IMU is used.
-
-\item Using IMUs for both rotational and translational motion estimation for image stabilization present many challenges including:
-\begin{itemize}
-    \item Accurate motion estimation over a longer period of time is not possible with classical algorithms.
+    \item Accurate motion estimation over a longer period of time is not possible as the noise present in the readings results in \textbf{drift}.
     
-    \item The positional \textbf{drift} in translational motion estimation increases non-linearly with time which makes the image stabilization useless.
-
-    \item This results in to output stabilized video quality being worse
+    \item The drift is alleviated in translational motion estimation as it increases non-linearly with time.
     
+    \item Working with drift is especially not possible in this case as we have an accuracy requirement of about 0.3 mm for the stabilization to work effectively.
+
+    \item Classical algorithms fail to provide this accuracy over a long period of time as they are susceptible to strong drift without absolute pose updates which in this case is not possible.
+
+    \item Due to these reasons, digital video stabilization using IMUs is rendered useless.
 \end{itemize}
-
-\item Working with this drift is especially not possible in this case as we have a accuracy requirement of about 0.5 mm for the stabilization to work effectively.
-
-\item IMUs have been used for position estimation for a long time using the classic Kalman Filter and its variants. They produce acceptable results for some cases but would not work in our case as they are susceptible to strong drift without absolute position updates. IMUs are also generally coupled with cameras, GPS and Magnetometers to improve the accuracy but it is not possible for this use case.
-
-\item Irrespective of these pitfalls, the use of IMU is necessary for estimating these small motions. To tackle these challenges the following contributions are presented in this thesis:
+    
+To deal with these challenges in other applications, IMUs are generally coupled with cameras, GPS and magnetometers to improve the accuracy but it is not possible for this use case. Irrespective of these pitfalls, the use of IMU is necessary for estimating these small motions. To tackle these challenges the following contributions are presented in this thesis:
 
 \begin{itemize}
     \item Analysis of real motion characteristics and building a simulation based on that analysis to generate huge amount of data.
 
-    \item Generating good data for data-driven approaches is very difficult, so, techniques for proper domain randomization are explored.
+    \item As generating good data for data-driven approaches is very difficult, techniques for proper domain randomization are explored.
 
-    \item Exploring the possible use of various neural network architectures to learn motion characteristics of these vibrations and are not susceptible to the drift.
+    \item Use of neural networks for accurate motion estimation using IMUs to combat drift.
+
+    \item Exploring various neural network architectures that are able to learn motion characteristics of these vibrations.
+
+    \item Development of a video stabilization pipeline using neural networks for motion estimation from IMU readings.
 \end{itemize}
 
-\end{itemize}
 
-There are a lot of challenges in this work to overcome and that makes this exciting. In the next chapter , fundamental of image stabilization and pose-estimation will be discussed. It will also cover some possible solutions and their pitfalls and advantages.
+\section{Summary}
+There are a lot of challenges in this work to overcome and that makes this exciting. In the upcoming chapters, these challenges are discussed in detail and various solutions are explored. Chapter 2 includes the fundamental techniques and algorithms of video stabilization. It also entails the use and characteristics of IMUs for motion estimation. Pose estimation algorithms, including both classical and data driven, are also explored. Various neural networks architectures along with their possible use are investigated.
+
+In chapter 3, state of the art algorithms for video stabilization and pose estimation are discussed. Chapter 4 examines the developed video stabilization pipeline and the measures taken to make it robust. Performance of various neural network architectures used in this are also evaluated.
+
+Chapter 5 presents a brief overview of the techniques examined and both their advantages and drawbacks. It concludes by discussing the future work required for futher improvements.

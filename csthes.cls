@@ -52,7 +52,6 @@
 
 % Load required Packages
 \RequirePackage[\babellanguage]{babel}
-\RequirePackage{natbib}
 \RequirePackage{fancyhdr}
 \RequirePackage[OT1]{fontenc}
 
@@ -208,9 +207,13 @@
 \newcommand*{\supervisortext@en}{Supervisors}
 
 % Bibliography
-\let\oldbibliography\bibliography
-\renewcommand*{\bibliography}[1]{\oldbibliography{#1}\addcontentsline{toc}{chapter}{\bibname}}
+% \let\oldbibliography\bibliography
+% \renewcommand*{\bibliography}[1]{\oldbibliography{#1}\addcontentsline{toc}{chapter}{\bibname}}
 
-% Use defaults
-\pagestyle{default}
-\bibliographystyle{apalike}
+% % Use defaults
+% \pagestyle{default}
+% \bibliographystyle{ieeetran}
+
+
+%\bibliography{references.bib}{}
+\bibliographystyle{IEEEtranN}
