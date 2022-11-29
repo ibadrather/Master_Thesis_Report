@@ -113,7 +113,7 @@
   \let \footnote \thanks
   \begin{center}
     \vspace*{.02\textheight}
-    \includegraphics[width=35mm]{images/logos/uni_siegen_logo.png}
+    \includegraphics[scale=0.75]{images/logos/uni_siegen_logo.png}
   \end{center}
   \null\vfil  
   
@@ -197,11 +197,14 @@
 \newcommand*{\indegreename@en}{in}
 \newcommand*{\dateprefix@en}{Draft of}
 \newcommand*{\facultyat@en}{at}
-\newcommand*{\faculty@en}{Carl Zeiss AG, Jena, \\ 
-                        Corporate Research Team (CRT) \\ 
+\newcommand*{\faculty@en}{
+                        Mechatronics\\ 
+                        Naturwissenschaftlich-Technische Fakult\"at \\
                         and \\
-                        Department of Mechatronics\\ 
-                        Naturwissenschaftlich-Technische Fakult\"at}
+                        Corporate Research and Technology (CRT), \\
+                        Carl Zeiss AG, Jena \\ 
+                        
+                        }
 \newcommand*{\facultyof@en}{of}
 \newcommand*{\university@en}{Universit\"at Siegen}
 \newcommand*{\supervisortext@en}{Supervisors}

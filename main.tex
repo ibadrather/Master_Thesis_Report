@@ -63,14 +63,14 @@ thesis  % please do not delete or change this line!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Set information about your thesis here  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Digital Video Stabilization \\ of an Oscillating Camera \\
+\title{Digital Video Stabilization \\ of an \\ Oscillating Camera \\
 using an \\ Inertial Measurement Unit}
 \subtitle{}% optional
 \setthesistype{Master}
 \author{Ibad Rather \matr{1532894}}
 
 \degree{MS Mechatronics}
-\supervisor{\\ University: Prof. Dr. Ing. Bhaskar Choubey \\Company: Dr. Steffen Urban 
+\supervisor{\\ University: Prof. Dr. Bhaskar Choubey \\Company: Dr. Steffen Urban 
             }% most likely
 
 % Start of content
@@ -79,11 +79,11 @@ using an \\ Inertial Measurement Unit}
 \maketitle
 % Give a short summary of your thesis
 \begin{abstract}
-Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical “post-processing” image stabilization where image features are extracted and tracked over time [1] or modern deep learning based methods using dense optical flow [2], they need to perform the motion estimation on constrained hardware systems and with very high  frame-rates of up to 100 fps or more. 
+Video stabilization is ubiquitous in today's smartphones and action cameras. However, instead of classical post-processing image stabilization where image features are extracted and tracked over time \citep{morimoto1998evaluation} or modern deep learning based methods using dense optical flow \citep{yu2020learning}, they need to perform the motion estimation on constrained hardware systems and with very high  frame-rates of up to 100 fps or more. 
 
-Hence the motion estimation, that is necessary to correct vibrations, shaking or rolling shutter distortions is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions [3] (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large $(\geq 50^\circ)$. In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods $(\leq 1s)$. 
+Hence the motion estimation, that is necessary to correct vibrations or shaking is performed using Inertial Measurement Units (IMUs). Typically, the motion estimates are reduced to rotational motions \citep{karpenko2011digital} (using gyroscopes) as the distance between frames is small and the field-of-view of the lenses large $(\geq 50^\circ)$. In addition, estimating translational motion is a difficult challenge using low-cost IMUs as the double integration of accelerometer readings is prone to strong drift and leads to large errors even over short time periods $(\leq 1s)$. 
 
-This thesis should investigate and develop an image stabilization method for an oscillating camera. The camera has a small field-of-view and hence small translational movements along the viewing direction will be visible and need to be stabilized. The camera is coupled with an IMU and attached to a linear stage, that will mimic the oscillating movements. The camera records a monitor or a static target. An additional goal is the implementation, optimization and testing of the proposed algorithm on a modern embedded chip.
+This thesis investigates and develops a video stabilization pipeline for an oscillating camera using IMUs. The camera has a small field-of-view and hence small translational movements along the viewing direction will be visible and need to be stabilized. The camera is coupled with an IMU and attached to a linear stage, that will mimic the oscillating movements.
 
 \end{abstract}
 % Set the table of contents

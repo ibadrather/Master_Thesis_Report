@@ -1,21 +1,21 @@
 \chapter{Introduction} \label{chapter_one}
 
-Cameras have become an integral part of our lives. We use cameras regularly, be it a smartphone camera, a hobbyist camera setup or a professional camera. Our demand for high quality media from cameras is also increasing constantly. We want sharper, color accurate, low lighting bright photographs. The videos are expected to capture scenes with as much realism as possible and we don't want too many movements in them irrespective of the way we capture them. If we are making a video capturing a beautiful sunrise or a landscape while walking, we do not want movements associated with walking in our video. We want it to be as smooth as possible. This is where \textit{Image Stabilization} comes into play. Its goal being producing a stable video irrespective of the camera movements during capture. Stabilization is a very important quality metric for videos. A video may have all the aspects of photography correct but if it has too many sudden movements it would not look good.
+Cameras have become an integral part of our lives. We use cameras regularly, be it a smartphone camera, a hobbyist camera setup or a professional camera. Our demand for high quality media from cameras is also increasing constantly. We want sharper, color accurate, low lighting bright photographs. The videos are expected to capture scenes with as much realism as possible and we don't want too many movements in them irrespective of the way we capture them. If we are making a video capturing a beautiful sunrise or a landscape while walking, we do not want movements associated with walking in our video. We want it to be as smooth as possible. This is where \textit{Image / Video Stabilization} comes into play. Its goal being producing a stable video irrespective of the camera movements during capture.
 
 % Motivation
 \section{Motivation}
 
-Image stabilization is a key technology to produce  good quality photographs and videos. Be it a 250,000 Euros television broadcast camera or a 100 Euros hobbyist camera, stabilization of some sort is necessary. That is why image stabilization exists in every camera and smartphone these days. There even exists a series of product lines from many big companies like DJI just for this specific reason; to stabilize the image (video). These products can cost between less than 100 Euros to upwards of 1000 Euros or more for professionals. This clearly indicates that the need for stabilization is there and constant efforts are being put to make it better.
+Image stabilization is a key technology to produce  good quality photographs and videos. Be it a 250,000 Euros television broadcast camera or a 100 Euros hobbyist camera, stabilization of some sort is necessary. That is why image stabilization exists in every camera and smartphone these days. There even exists a series of product lines from many big companies like DJI just for this specific reason; to stabilize the videos. These products can cost between less than 100 Euros for hobbyists to upwards of 1000 Euros or more for professionals. This clearly indicates that the need for stabilization is there and constant efforts are being put to make it better.
 
-On microscopic level, the stabilization of videos becomes even more important as even small movements can cause large pixel shifts in the image plane. This can be seen by zooming in on your camera while trying to keep it stable. The effect of magnification becomes more evident and it will become increasingly more difficult to keep the image smooth and stable as the movements are magnified as well. This will deteriorate the video quality and is very important to deal with. 
+On microscopic level, the stabilization of videos becomes even more important as even small movements can cause large pixel shifts in the image plane. This can be seen by zooming in on your camera while trying to keep it stable. The effect of magnification becomes more evident and it will become increasingly more difficult to keep the video smooth and stable as the movements are magnified as well. This deteriorates the video quality and is very important to deal with. 
 
-Microscopic movements are the scope of this work. A modified GoPro Hero 10 (figure \ref{fig:gopro_hero10}) camera is used as it allows to extract synchronized sensor and video data. The wide angle fisheye lens of the GoPro was exchanged with a narrow field-of-view lens that has a very large focal length. Switching the lens resulted in the default stabilization provided by GoPro (HyperSmooth) to not work anymore. The goal of this work is to explore different methods to obtain a stabilized video stream for large focal length lenses.
+Microscopic movements are the scope of this work. A modified GoPro Hero 10 (Figure \ref{fig:mod_gopro_hero10}) camera is used as it allows to extract synchronized sensor and video data. The wide angle fisheye lens of the GoPro was exchanged with a narrow field-of-view lens that has a very large focal length. Switching the lens resulted in the default stabilization provided by GoPro (HyperSmooth) to not work anymore. The goal of this work is to explore different methods to obtain a stabilized video stream for large focal length lenses.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.1]{images/fig_chapter1/gopro_hero10.png}
-    \caption{GoPro Hero 10}
-    \label{fig:gopro_hero10}
+    \includegraphics[scale=0.25]{images/fig_chapter4/mod_gorpro_hero_10.png}
+    \caption{Modified GoPro Hero 10 with large focal length lens}
+    \label{fig:mod_gopro_hero10}
 \end{figure}
 
 
@@ -67,9 +67,11 @@ To deal with these challenges in other applications, IMUs are generally coupled 
 \end{itemize}
 
 
-\section{Summary}
-There are a lot of challenges in this work to overcome and that makes this exciting. In the upcoming chapters, these challenges are discussed in detail and various solutions are explored. Chapter 2 includes the fundamental techniques and algorithms of video stabilization. It also entails the use and characteristics of IMUs for motion estimation. Pose estimation algorithms, including both classical and data driven, are also explored. Various neural networks architectures along with their possible use are investigated.
+\subsubsection{Chapter Summary}
+There are a lot of challenges in this work to overcome and end goal is important. That makes this work exciting. In the upcoming chapters, these challenges are discussed in detail and various solutions are explored. 
 
-In chapter 3, state of the art algorithms for video stabilization and pose estimation are discussed. Chapter 4 examines the developed video stabilization pipeline and the measures taken to make it robust. Performance of various neural network architectures used in this are also evaluated.
+Chapter 2 includes the fundamental techniques and algorithms of video stabilization. It also entails the use and characteristics of IMUs for motion estimation. Pose estimation algorithms, including both classical and data driven, are also explored. Various neural networks architectures along with their possible use are investigated.
 
-Chapter 5 presents a brief overview of the techniques examined and both their advantages and drawbacks. It concludes by discussing the future work required for futher improvements.
+In chapter 3, state of the art algorithms for video stabilization and pose estimation are discussed. Chapter 4 examines the developed video stabilization pipeline and the measures taken to make it robust. Performance of various neural network architectures used is also evaluated.
+
+Chapter 5 presents a brief overview of the techniques examined and both their advantages and drawbacks. It concludes by discussing the future work required for further improvements.

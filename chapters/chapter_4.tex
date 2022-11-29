@@ -11,17 +11,17 @@ In the past chapters, the challenges associated and methods available were discu
 
 \begin{figure}[H]
     % \centering
-    \includegraphics[scale=0.58]{images/fig_chapter4/dis_pipleline.pdf}
+    \includegraphics[scale=0.65]{images/fig_chapter4/dis_pipleline.pdf}
     \caption{Flowchart of a DVS pipeline using a IMU for pose estimation}
     \label{fig:dis_pipeline}
 \end{figure}
 
-In this work, an IMU sensor will be used for camera pose estimation that is a prerequisite for video stabilization. Based on the accuracy requirements for the camera pose estimation algorithm a data-driven neural network approach will be used, as classical signal processing combined with filtering failed to provide the required accuracy over longer periods of time due to severe drift. To be able to train the models to the required accuracy, a combination of simulated and real data is used. To capture the video we are using a GoPro Hero 10 which provides synchronised image and sensor data capture. The factory wide FoV lens was swapped to a low field of view lens having a large focal length (depicted in figure \ref{fig:mod_gopro_hero10}). The simulation was build using Unreal Engine 4 and Microsoft AirSim. Table \ref{tab:technical_details} shows the technical specifications of the camera setup. For simulation similar camera parameters were used.
+In this work, an IMU sensor will be used for camera pose estimation that is a prerequisite for video stabilization. Based on the accuracy requirements for the camera pose estimation algorithm a data-driven neural network approach will be used, as classical signal processing combined with filtering failed to provide the required accuracy over longer periods of time due to severe drift. To be able to train the models to the required accuracy, a combination of simulated and real data is used. To capture the video we are using a GoPro Hero 10 which provides synchronised image and sensor data capture. The factory wide FoV lens was swapped to a low field of view lens having a large focal length (depicted in Figure \ref{fig:mod_gopro_hero10}). The simulation was build using Unreal Engine 4 and Microsoft AirSim. Table \ref{tab:technical_details} shows the technical specifications of the camera setup. For simulation similar camera parameters were used.
 
 \begin{table}[H]
     \centering
-\begin{tabular}{ c| c | L }
-
+\begin{tabular}{| c| c | L |}
+    \hline
      Image Sensor & 
      Sony & 
      Diagonal 7.85 mm (Type 1/2.3) 23.91 M CMOS Image Sensor with Square Pixel. \\
@@ -30,35 +30,32 @@ In this work, an IMU sensor will be used for camera pose estimation that is a pr
      IMU Sensor & 
      Bosch & 
      6-axis IMU Sensor
-     Accelerometer (A): 16-bit or 0.06 mg/LSB 
-     Gyroscope (G): 16-bit or 0.004 dps/LSB  \\
+     % Accelerometer (A): 16-bit or 0.06 mg/LSB 
+     % Gyroscope (G): 16-bit or 0.004 dps/LSB  
+     \\
      \hline
      
      Lens & 
      Zeiss & 
      15° FOV and 200 mm focal length \\
 
+     \hline
+
 \end{tabular}
     \caption{Hardware technical specifications}
     \label{tab:technical_details}
 \end{table}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.25]{images/fig_chapter4/mod_gorpro_hero_10.png}
-    \caption{Modified GoPro Hero 10 with large focal length lens}
-    \label{fig:mod_gopro_hero10}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[scale=0.25]{images/fig_chapter4/mod_gorpro_hero_10.png}
+%     \caption{Modified GoPro Hero 10 with large focal length lens}
+%     \label{fig:mod_gopro_hero10}
+% \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.2]{images/fig_chapter4/bmi260.png}
-    \caption{Bosch BMI260 IMU Sensor}
-    \label{fig:imu_bmi260}
-\end{figure}
 
 \section{Data Collection}
-Collecting enough data for any data driven learning approach is cumbersome and sometimes an iterative process. The data or training data in this case are the readings coming from the IMU sensor and the target (ground truth) being the camera pose (position and orientation). Real data was collected by mounting the camera on a rig which had vibrations associated with it on movement (figure \ref{fig:camera_rig}). We made sure that the data depicts real life scenarios by moving the rig around in many different ways and let it vibrate and collect the data. The ground truth camera and IMU poses as well as all calibration parameters like camera intrinsics, IMU parameters and transformations between the sensor coordinate frames were generated using proprietary Zeiss software and is beyond the scope of this work.
+Collecting enough data for any data driven learning approach is cumbersome and sometimes an iterative process. The data or training data in this case are the readings coming from the IMU sensor and the target (ground truth) being the camera pose (position and orientation). Real data was collected by mounting the camera on a rig which had vibrations associated with it on movement (Figure \ref{fig:camera_rig}). We made sure that the data depicts real life scenarios by moving the rig around in many different ways and let it vibrate and collect the data. The ground truth camera and IMU poses as well as all calibration parameters like camera intrinsics, IMU parameters and transformations between the sensor coordinate frames were generated using proprietary Zeiss software and is beyond the scope of this work.
 
 \begin{figure}[H]
     \centering
@@ -77,10 +74,15 @@ The data recorded from the real world camera setup was analysed to determine the
 
 \begin{table}[H]
 \centering
-\begin{tabular}{l|c}
+\begin{tabular}{| l|c |}
+    \hline
+    
     \textbf{Parameter} & \textbf{Value} \\ \hline
     Accelerometer White Noise & $ \mu = 0 $ and $ \sigma^{2}=0.3$x$10^{-3} m/s^{2}$  \\  
-    Gyro White Noise & $ \mu = 0 $ and $ \sigma^{2}=2.8$x$10^{-6} rad/s$ \\  
+    Gyro White Noise & $ \mu = 0 $ and $ \sigma^{2}=2.8$x$10^{-6} rad/s$ \\
+
+    \hline
+    
 \end{tabular}
 \caption{IMU noise characteristics}
 \label{tab:imu_noise_characteristics}
@@ -100,7 +102,7 @@ The data recorded from the real world camera setup was analysed to determine the
 % \label{tab:imu_noise_characteristics}
 % \end{table}
 
-Apart from the IMU noise characteristics the vibrations from the real ground truth data were analyzed. These vibration characteristics are important to understand their and to set the Simulation parameters. Vibrations are characterised by \textbf{Amplitude} ( A or  $ \theta $), \textbf{Time Constant} $ \tau $ and \textbf{Frequency} $ \omega $. We have damped oscillations for both translational and rotational vibrations as shown in figure \ref{fig:damped_vib} and can be characterised by the equations \ref{eqn:vib_disp} and \ref{eqn:vib_rot}.
+Apart from the IMU noise characteristics the vibrations from the real ground truth data were analyzed. These vibration characteristics are important to understand their and to set the Simulation parameters. Vibrations are characterised by \textbf{Amplitude} ( A or  $ \theta $), \textbf{Time Constant} $ \tau $ and \textbf{Frequency} $ \omega $. We have damped oscillations for both translational and rotational vibrations as shown in Figure \ref{fig:damped_vib} and can be characterised by the equations \ref{eqn:vib_disp} and \ref{eqn:vib_rot}.
 
 \begin{equation}
   \label{eqn:vib_disp}
@@ -177,7 +179,7 @@ Apart from the IMU noise characteristics the vibrations from the real ground tru
 \end{figure}
 
 
-The statistical analysis shown in figure \ref{fig:dist_disp} and figure \ref{fig:dist_rot} was done on 248 real world camera setup vibration sequences having an average length of 10 seconds. The results for translational and rotational vibrations are summarised in table \ref{tab:real_data_analysis_displacement} and table \ref{tab:real_data_analysis_rotation} respectively. The rotational vibrations have very small amplitude $ \theta $ and is less than 1 degrees for more than 75 percent of the samples in XY plane. For Z axis the vibrations are even smaller with a mean of 0.0005 degrees. These vibrations are very small and do not have a a noticeable visual effect on the video stabilization. But we have decided to account for them to develop a more general solution with multiple applications. The time constant $ \tau $ for displacement and rotation is similar for all DoF with a mean value of around 2.9 seconds.  The frequency $ \omega $ for all DoF is also similar in the range $ 2.5 rad/sec $ to $ 3.5 rad/sec $. Frequency of $ 2.5 rad/sec $ is the most dominant frequency and seems to be the natural frequency $ \omega_n $ of the mechanical system (camera setup).
+The statistical analysis shown in Figure \ref{fig:dist_disp} and Figure \ref{fig:dist_rot} was done on 248 real world camera setup vibration sequences having an average length of 10 seconds. The results for translational and rotational vibrations are summarised in table \ref{tab:real_data_analysis_displacement} and table \ref{tab:real_data_analysis_rotation} respectively. The rotational vibrations have very small amplitude $ \theta $ and is less than 1 degrees for more than 75 percent of the samples in XY plane. For Z axis the vibrations are even smaller with a mean of 0.0005 degrees. These vibrations are very small and do not have a a noticeable visual effect on the video stabilization. But we have decided to account for them to develop a more general solution with multiple applications. The time constant $ \tau $ for displacement and rotation is similar for all DoF with a mean value of around 2.9 seconds.  The frequency $ \omega $ for all DoF is also similar in the range $ 2.5 rad/sec $ to $ 3.5 rad/sec $. Frequency of $ 2.5 rad/sec $ is the most dominant frequency and seems to be the natural frequency $ \omega_n $ of the mechanical system (camera setup).
 
 
 The amplitude $ A $ of the translational displacements is the most important characteristic as it is main source of video destabilization. The effect of motion on the quality of video is more pronounced in XY plane as the most pixel shift happens here. In Z axis the mean $ \mu $ of translational vibrations is 0.113 mm with a standard deviation ($ \sigma^{2} $) of 0.07 mm. Even the large displacements in Z seem to have little effect on visual quality of the video. Transnational vibration displacements in XY plane have the mean of 1.9 mm with a standard deviation of 1.36 mm. Vibrations with higher magnitude are also present and need to be accounted for when generating simulated data.
@@ -185,12 +187,14 @@ The amplitude $ A $ of the translational displacements is the most important cha
 % displacement data distribution table
 \begin{table}[H]
     \centering
-\begin{tabular}{ c | L | L | L }
+\begin{tabular}{| c | L | L | L |}
+
+    \hline
     
-     Parameter  & 
-     Mean ($ \mu $) & 
-     Variance ($ \sigma^{2} $) &
-     Standard Deviation ($ \sigma $)\\
+     \textbf{Parameter}  & 
+     \textbf{Mean ($ \mu $)} & 
+     \textbf{Variance ($ \sigma^{2} $)} &
+     \textbf{Standard Deviation ($ \sigma $)} \\
      \hline
      
      $ A_{xy} $ & 
@@ -228,6 +232,8 @@ The amplitude $ A $ of the translational displacements is the most important cha
      $ 5.87 s^{2} $ &
      $ 2.42 s $ \\
 
+    \hline
+
 \end{tabular}
     \caption{Real translational-vibration data distributions}
     \label{tab:real_data_analysis_displacement}
@@ -236,12 +242,13 @@ The amplitude $ A $ of the translational displacements is the most important cha
 % rotation data distribution table
 \begin{table}[H]
     \centering
-\begin{tabular}{ c | L | L | L }
+\begin{tabular}{| c | L | L | L |}
 
-     Parameter  & 
-     Mean ($ \mu $) & 
-     Variance ($ \sigma^{2} $) &
-     Standard Deviation ($ \sigma $)\\
+    \hline
+     \textbf{Parameter}  & 
+     \textbf{Mean ($ \mu $)} & 
+     \textbf{Variance ($ \sigma^{2} $)} &
+     \textbf{Standard Deviation ($ \sigma $)} \\
      \hline
      
      $ \theta_{xy} $ & 
@@ -279,6 +286,8 @@ The amplitude $ A $ of the translational displacements is the most important cha
      $ 4.73 s^{2} $ &
      $ 2.17 s $ \\
 
+     \hline
+
 \end{tabular}
     \caption{Real rotational-vibration data distributions}
     \label{tab:real_data_analysis_rotation}
@@ -295,9 +304,9 @@ Simulated data is based on the analysed real data with vibration characteristics
 
 \section{Structuring of Data}
 \label{sec:data_structure}
-In classical pose-estimation techniques, every single IMU sample is integrated to the pose estimation individually. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (figure \ref{fig:imu_window_samples}) is used as a single sample does not contain enough information to extract meaningful information. 
+In classical pose-estimation techniques, every single IMU sample is integrated to the pose estimation individually. Data driven approaches differ in this case as discussed in section \ref{sec:sota_pose_est}. For data driven approaches instead of taking an individual sample a \textit{window} of samples (Figure \ref{fig:imu_window_samples}) is used as a single sample does not contain enough information to extract meaningful information. 
 
-In a supervised learning setting, neural networks require a sufficient amount of data to prevent them from over-fitting to a few samples and to be able to learn the underlying statistics and patterns in the data. Initially we experimented with small window samples (3 - 20 samples) as shown in figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was too high for accurate stabilization. Good results were achieved with window a window size between 70 to 150 samples (example of windows of IMU data depicted in figure \ref{fig:imu_window_samples}). Larger window sizes did not have an influence on the accuracy but led to increased inference times of the neural network and latency became too high. Hence in the following a window size of 143 was chosen.
+In a supervised learning setting, neural networks require a sufficient amount of data to prevent them from over-fitting to a few samples and to be able to learn the underlying statistics and patterns in the data. Initially we experimented with small window samples (3 - 20 samples) as shown in Figure \ref{fig:imu_window_samples} a. This did not yield very good results and the pose estimation error was too high for accurate stabilization. Good results were achieved with window a window size between 70 to 150 samples (example of windows of IMU data depicted in Figure \ref{fig:imu_window_samples}). Larger window sizes did not have an influence on the accuracy but led to increased inference times of the neural network and latency became too high. Hence in the following a window size of 143 was chosen.
 
 \begin{figure}[H]
     %%
@@ -311,16 +320,16 @@ In a supervised learning setting, neural networks require a sufficient amount of
     %%
     \begin{subfigure}{\linewidth}
     \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_100.pdf}\hfill
-    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_144.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_143.pdf}\hfill
     \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/imu_window_size_200.pdf}\hfill
-    \caption{Window size 100, 144, 200}
+    \caption{Window size 100, 143, 200}
     \end{subfigure}
 \caption{Different IMU window samples}
 \label{fig:imu_window_samples}
 \end{figure}
 
 \section{Training and Testing of Various Neural Networks}
-Various neural network architectures were trained and tested to accurately estimate the camera pose with respect to a stabilized trajectory. The input to the neural network is a window of sensor readings coming from an IMU and the network is trained against the deviation with respect to the stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in figure \ref{fig:stab_traj_ideal}. 
+Various neural network architectures were trained and tested to accurately estimate the camera pose with respect to a stabilized trajectory. The input to the neural network is a window of sensor readings coming from an IMU and the network is trained against the deviation with respect to the stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in Figure \ref{fig:stab_traj_ideal}. 
 
 \begin{figure}
     \centering
@@ -343,7 +352,7 @@ The training dataset consists of 400 samples of length 10 seconds each. Which me
 
 %% CNN
 \subsection{Convolutional Neural Network}
-A convolutional neural network with six stacked Conv1D layers each with batch normalization and ReLU activations is used to extract features from the input data as shown in figure \ref{fig:cnn_used}. Then the output of these convolution layers is regularized during training using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{MLP} layers.
+A convolutional neural network with six stacked Conv1D layers each with batch normalization and ReLU activations is used to extract features from the input data as shown in Figure \ref{fig:cnn_used}. Then the output of these convolution layers is regularized during training using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{MLP} layers.
 
 \begin{figure}
     \centering
@@ -353,7 +362,7 @@ A convolutional neural network with six stacked Conv1D layers each with batch no
 \end{figure}
 
 \subsubsection{Model Output Analysis}
-Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds long video with translational vibrations in 3 axis (x,y,z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction too far off and not smooth enough which will case jitter in the stabilization. The error in all axis is depicted in figure \ref{fig:cnn_error}.
+Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds long video with translational vibrations in 3 axis (x,y,z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction too far off and not smooth enough which will case jitter in the stabilization. The error in all axis is depicted in Figure \ref{fig:cnn_error}.
 
 \begin{figure}[H]
     \centering
@@ -364,17 +373,17 @@ Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_cnn.pdf}
+    \includegraphics[scale=0.65]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_cnn.pdf}
     \caption{Error in each axis for CNN}
     \label{fig:cnn_error}
 \end{figure}
 
 %% ResNet
 \subsection{ResNet}
-Convolution neural network having \textbf{Residual Skip Connections} with six \textbf{1D-Convolutional} Layers in sequence with \textbf{Batch Normalisation} and  \textbf{ReLU} activation is used to extract features from the input data. Then the output of these convolution layers is regularized using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{Linear} layers. 
+Convolution neural network having \textbf{Residual Skip Connections} with six \textbf{1D - Convolutional} Layers in sequence with \textbf{Batch Normalisation} and  \textbf{ReLU} activation is used to extract features from the input data. Then the output of these convolution layers is regularized using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{Linear} layers. 
 
 \subsubsection{Model Output Analysis}
-Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds video three linear DoF (x, y, z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction is off and thus causes jitter in stabilization. The error in all DoF can be seen in figure \ref{fig:resnet_error}.
+Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds video three linear DoF (x, y, z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction is off and thus causes jitter in stabilization. The error in all DoF can be seen in Figure \ref{fig:resnet_error}.
 
 \begin{figure}[H]
     \centering
@@ -392,7 +401,7 @@ Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.52]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_resnet.pdf}
+    \includegraphics[scale=0.65]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_resnet.pdf}
     \caption{Error in each DoF for ResNet}
     \label{fig:resnet_error}
 \end{figure}
@@ -421,13 +430,13 @@ Figure \ref{fig:cnn_trans_op_vs_gt} shows the model output vs ground truth plot 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.52]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_transformer.pdf}
+    \includegraphics[scale=0.65]{images/fig_chapter4/nn_related/error_in_predicted_vs_ground_truth_transformer.pdf}
     \caption{Error in each DoF for CNN-Transformer predictions}
     \label{fig:cnn_trans_error}
 \end{figure}
 
 \subsection{Smoothing of Stabilization Trajectory}
-The neural network is able to regress the stabilization trajectory accurately with the required precision. But the regressed trajectory is not smooth as show in figure \ref{fig:rough_mo_smooth_gt} and has sharp peaks and sudden changes. This is not acceptable as these rough peaks cause jitter in the stabilized video. To account for this, we implemented \textit{Trajectory-Smoothening} in our digital image stabilization pipeline as shown in figure \ref{fig:dis_smooth_pipeline}. An \textbf{Exponential Moving Average Filter} (Equation \ref{eqn:emaf}) is implemented to smooth the trajectory and minimise jitter. Figure \ref{fig:rough_mo_smooth_mo} shows the effect of this filter on the model output.
+The neural network is able to regress the stabilization trajectory accurately with the required precision. But the regressed trajectory is not smooth as show in Figure \ref{fig:rough_mo_smooth_gt} and has sharp peaks and sudden changes. This is not acceptable as these rough peaks cause jitter in the stabilized video. To account for this, we implemented \textit{Trajectory-Smoothening} in our digital image stabilization pipeline as shown in Figure \ref{fig:dis_smooth_pipeline}. An \textbf{Exponential Moving Average Filter} (Equation \ref{eqn:emaf}) is implemented to smooth the trajectory and minimise jitter. Figure \ref{fig:rough_mo_smooth_mo} shows the effect of this filter on the model output.
 
 \begin{figure}[H]
     \centering
@@ -446,7 +455,7 @@ Where $ y_t $ is the smoothed signal and $ y_{t-1} $ is the smoothed signal at p
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.25]{images/fig_chapter4/nn_related/rough_mo_smooth_mo.pdf}
+    \includegraphics[scale=0.3]{images/fig_chapter4/nn_related/rough_mo_smooth_mo.pdf}
     \caption{Smoothed model output vs raw model output}
     \label{fig:rough_mo_smooth_mo}
 \end{figure}
@@ -464,9 +473,9 @@ Where $ y_t $ is the smoothed signal and $ y_{t-1} $ is the smoothed signal at p
 %% ############################## Mathematics ########################################
 
 % \section{Warping Grid Estimation}
-% In our \textit{Digital Image Stabilization Pipeline} (figure \ref{fig:dis_pipeline}) after getting the relative pose from stabilization trajectory, we need to estimate the warping grid. This warping grid is applied to the image coming from the camera with a crop-ratio of 95 percent (5 percent of the image area will be cropped). These series of warped images based on the pose estimated results into the output stabilized video. 
+% In our \textit{Digital Image Stabilization Pipeline} (Figure \ref{fig:dis_pipeline}) after getting the relative pose from stabilization trajectory, we need to estimate the warping grid. This warping grid is applied to the image coming from the camera with a crop-ratio of 95 percent (5 percent of the image area will be cropped). These series of warped images based on the pose estimated results into the output stabilized video. 
 
-% For warping grid calculation we need to estimate \textit{homography} between stabilized trajectory frame (no actual frame in our case because our prediction is always relative to the stabilized trajectory itself) and the current frame. We assume two image points \textbf{\textit{x}} at times $ t_{i} $ (equation \ref{eqn:x_ti}) and $ t_{j} $ (equation \ref{eqn:x_tj}) from scene points \textbf{X} as shown in figure \ref{fig:dis_point_scene}.
+% For warping grid calculation we need to estimate \textit{homography} between stabilized trajectory frame (no actual frame in our case because our prediction is always relative to the stabilized trajectory itself) and the current frame. We assume two image points \textbf{\textit{x}} at times $ t_{i} $ (equation \ref{eqn:x_ti}) and $ t_{j} $ (equation \ref{eqn:x_tj}) from scene points \textbf{X} as shown in Figure \ref{fig:dis_point_scene}.
 
 % \begin{figure}[H]
 %     \centering
@@ -517,7 +526,7 @@ Where $ y_t $ is the smoothed signal and $ y_{t-1} $ is the smoothed signal at p
 \section{Model Deployment}
 Figure \ref{fig:dis_smooth_pipeline} shows the digital image stabilization pipeline and our goal is to minimise the time taken at each step. The video (images) are coming at 60 FPS from the camera that has 4K resolution (3840x2160 pixels). We ideally have 1/60 seconds (16.67 ms) to complete all the steps of the DIS pipeline. In this pipeline, model inference and stabilization grid calculation take most of the given time. Stabilization grid calculation is a series of matrix multiplications and has been already optimized. Thus, low inference latency is highly desirable.
 
-\subsection{Making Models Fast}
+\subsection{Decreasing model inference latency}
 There are many techniques to reduce the inference latency of neural network models. Using these methods may reduce the performance of a neural network but are essential for deployment as models in their original form may not be usable at all. Some of the popular methods are discussed below.
 
 \subsubsection{Quantization}
@@ -534,12 +543,13 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
 % Sim Vibration characteristics
  \begin{table}[H]
 \centering
-\begin{tabular}{ l | L | L | L }
-    
-    Architecture  & 
-    Format & 
-    No. of Parameters &
-    Inference Latency (ms) \\
+\begin{tabular}{| l | L | L | L |}
+
+    \hline
+    \textbf{Architecture}  & 
+    \textbf{Format} & 
+    \textbf{No. of Parameters} &
+    \textbf{Inference Latency (ms)} \\
     \hline
     
     CNN & 
@@ -547,29 +557,29 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
     745,375  &
     -  \\
     
-    
+    \hline
     CNN & 
     ONNX (.onnx)  & 
     745,375   &
     -  \\
-    
+    \hline
     ResNet & 
     PyTorch Checkpoint (.ckpt)  & 
     1.85 Million &
     -  \\
     
-    
+    \hline
     ResNet & 
     ONNX (.onnx)  & 
     1.85 million  &
     -  \\
-    
+    \hline
     CNN-Transformer & 
     PyTorch Checkpoint (.ckpt)  & 
     225,356  &
     -  \\
     
-    
+    \hline
     CNN-Transformer & 
     ONNX (.onnx)  & 
     225,356  &

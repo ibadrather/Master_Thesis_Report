@@ -1,21 +1,13 @@
 \chapter{Building Blocks} \label{chapter_two}
 
-In the first chapter, the importance of Video Stabilization and the challenges associated with it using an IMU sensor were discussed. This chapter discusses current video stabilisation techniques available to us. The first section explains both hardware and software based video stabilization techniques and details their advantages and disadvantages. It further makes a case for our chosen technique and explains how it was utilised. 
+In the first chapter, the importance of Video Stabilization and the challenges associated with it using an IMU sensor were discussed. This chapter discusses current video stabilisation techniques available to us. The Section \ref{sec:video_stabilization} explains both hardware and software based video stabilization techniques and details their advantages and disadvantages. It further makes a case for the chosen technique and explains how it was utilised. 
 
-In the second section, we explore the different techniques for motion estimation and examine whether or not they can be used for our purpose of video stabilisation.
+In the Section \ref{sec:motion_estimation} , we explore the different techniques for motion estimation and examine whether or not they can be used for our purpose of video stabilisation. Section \ref{sec:imu} discusses the characteristics of Inertial Measurement Unit (IMU) and the qualities which makes it the most widely used technique for pose estimation. It further explores IMU sensors and the challenges associated in working with it.  IMU noise model is discussed and the effect of this noise on pose estimation is explored.
 
-The third section discusses the characteristics of Inertial Measurement Unit (IMU) and the qualities which makes it the most widely used technique for pose estimation. It further explores IMU sensors and their challenges, including their noise models, effects of their inherent noise and reasons for the drift caused in them. 
-
-The fourth section explores how pose estimation can be done with the use of IMU. It discusses the classical techniques used for it and details their drawbacks. Lastly, it explains the use of neural networks for pose estimation due to their advancement and their ability to outperform the classical algorithms.
-
-The fifth section describes the different types of neural network architectures and their properties and explains how they can be used for IMU pose estimation. 
-
-Then we will also discuss in depth the challenges associated with IMU pose-estimation and how we can overcome those challenges. Fundamentals of neural networks and their applications will also be briefly conferred as they are a huge part of this work.
-
-
+Section \ref{sec:pose_estimation_imu} explores how pose estimation can be done with the use of IMU. It discusses the classical techniques used for it and details their drawbacks. Lastly, it explains the use of neural networks for pose estimation due to their advancement and their ability to outperform the classical algorithms. Section \ref{sec:neural_network} describes the different types of neural network architectures and their properties and explains how they can be used for IMU pose estimation.
 
 \section{Video Stabilization}
-\label{sec:image_stab}
+\label{sec:video_stabilization}
 If a camera is not stationary during video capture the output video quality may degrade and not look good. Depending on the movements during capture, the video may look very shaky or even the subjects may not be properly visible. This is very undesirable and can cause visual discomfort \citep{jia2012probabilistic}. One solution to this is to keep the camera steady by mounting it on stable tripod or to a rigid object. But this is not practically possible all the time. There are various scenarios in which the camera may move around a lot and the movements may not be smooth at all e.g an action camera mounted on a helmet or a bicycle, a camera mounted on a car or a robot in wild or some move-able rig or a robot arm.
 
 The motion of the camera can be high-frequency tremors due to vibration, shaking or jiggling of the mounting point \citep{ryu2012robust} or low frequency such as movement of handheld camera during walking \citep{dis_review}. Practically, in most of the video recording scenarios, the camera will have some movement. The goal of video stabilization is to create a output video with same visual content without the undesired movements. 
@@ -30,11 +22,11 @@ To deal with such movements and to make the video stable various techniques exis
 \end{itemize}
 There are techniques which combine both these methods and are called hybrid video stabilization techniques.
 
-The goal of each of these stabilization techniques is to estimate the motion or pose and then use the estimated motion to stabilize the video. Motion/pose estimation will be discussed in the section \ref{sec:pose_estimation} in detail.
+The goal of each of these stabilization techniques is to estimate the motion or pose and then use the estimated motion to stabilize the video. Motion/pose estimation will be discussed in the section \ref{sec:motion_estimation} in detail.
 
 
 \subsubsection{Hardware Video Stabilization (HIS)}
-Hardware video stabilization at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilized by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. After the motion has been counter-acted upon, images are captured which results in a stabilized video output as seen in figure \ref{fig:his}. These methods although mostly effective are not perfect and have both advantages and disadvantages.
+Hardware video stabilization at its core means moving the lens or the image sensor or the camera setup itself to counteract these movements while recording the video. The movements of camera can be minimised by the use of mechanical stabilizers like tripods or dollies \citep{5995525}. The use of electronic gimbals for video recording has also increased recently for both professionals and hobbyists. Video can also be stabilized by varying the optical path between lens and the image sensor. This is generally achieved by using electronic motors and IMU sensors to move around the lens or the image sensor or both to cancel out the motions. After the motion has been counter-acted upon, images are captured which results in a stabilized video output as seen in Figure \ref{fig:his}. These methods although mostly effective are not perfect and have both advantages and disadvantages.
 
 
 \begin{figure}[H]
@@ -63,7 +55,7 @@ Hardware video stabilization at its core means moving the lens or the image sens
 \end{itemize}
 
 \subsubsection{Digital Video Stabilization (DVS)}
-Digital Video Stabilization (DVS) is a software based video stabilization technique \citep{dis_review}. The technique here is similar what is done is HVS i.e. first the motion of the camera is estimated (pose-estimation) and based on this, the image is stabilized. The difference here is that after pose estimation is done, instead of moving around the hardware a suitable transformation (warping) is applied to the image \citep{dis_feat_track} as shown is figure \ref{fig:dis}. The resulting stabilized image (video) is motionless irrespective of the camera motions. DVS is be a very powerful technique but like other methods and techniques, it has its advantages and disadvantages.
+Digital Video Stabilization (DVS) is a software based video stabilization technique \citep{dis_review}. The technique here is similar what is done is HVS i.e. first the motion of the camera is estimated (pose-estimation) and based on this, the image is stabilized. The difference here is that after pose estimation is done, instead of moving around the hardware a suitable transformation (warping) is applied to the image \citep{dis_feat_track} as shown is Figure \ref{fig:dis}. The resulting stabilized image (video) is motionless irrespective of the camera motions. DVS is be a very powerful technique but like other methods and techniques, it has its advantages and disadvantages.
 
 \begin{figure}[H]
 \centering
@@ -94,9 +86,9 @@ Digital Video Stabilization (DVS) is a software based video stabilization techni
 Regardless of the type of video stabilization technique motion estimation is a fundamental task and will be discussed in the next section.
 
 % Start: Motion Estimation
-\section{Motion Estimation for Image Stabilization}
-\label{sec:pose_estimation}
-Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques / algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on the actual, shaky camera motions, a smoothed trajectory can be calculated that will create a stabilized video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor and software based techniques exist as show in figure \ref{fig:cam_pose_est}.
+\section{Motion Estimation for Video Stabilization}
+\label{sec:motion_estimation}
+Camera motion (pose) estimation is very important and one of the most challenging parts of image stabilization. Before hardware and digital stabilization techniques / algorithms can be implemented, we need to perform pose estimation to figure out the camera motions. Then based on the actual, shaky camera motions, a smoothed trajectory can be calculated that will create a stabilized video. The accuracy of motion estimation ultimately determines the effectiveness of image stabilization \citep{ryu2012robust}. To estimate the camera motion many sensor and software based techniques exist as show in Figure \ref{fig:cam_pose_est}.
 
 \begin{figure}[H]
 \centering
@@ -166,8 +158,8 @@ There are a lot of reasons to use IMUs and these reasons are surely a very huge 
 In this thesis, a pose has six degrees of freedom and is defined by a position and a orientation with respect to some coordinate system. Continuous IMU readings are taken and using some algorithm pose is estimated. Figure \ref{fig:strapdown_imu} below shows the strap-down inertial navigation algorithm \citep{woodman2007introduction}. For orientation estimation gyroscope readings are used and for position estimation both gyroscope and accelerometer readings are used. The use of this algorithm directly for pose-estimation is not possible as the IMU readings are far from being ideal, they contain noise and have a bias \citep{woodman2007introduction} which needs to be accounted for. In addition, integration of the accelerometer signal needs prior information like the initial velocity or the initial position that are, dependent on the application, not always easily obtainable.
 
 \begin{figure}[H]
-\includegraphics[scale=0.75]{images/fig_chapter2/strap_imu_algo.pdf}
-\caption{Strap-down inertial navigation algorithm \citep{woodman2007introduction}}
+\includegraphics[scale=0.72]{images/fig_chapter2/strap_imu_algo.pdf}
+\caption{Strap-down inertial navigation algorithm }
 \label{fig:strapdown_imu}
 \end{figure}
 
@@ -190,7 +182,7 @@ Where $ \omega_{n}(t) $ is the noisy gyroscope signal, $ \omega(t) $ is the true
 
 Where $ a_{n}(t) $ is the noisy accelerometer signal, $ a(t) $ is the true accelerometer signal, $ b_{a}(t) $ is the accelerometer bias that is time varying and $ n_{a} $ is the accelerometer white noise.
 
-To visualise the \textit{Noise Model}, let's take a true unit signal as show in figure \ref{fig:imu_noise}. \textbf{Bias} can be defined as constant offset from true signal value. White noise can be thought of as random fluctuations of equal intensity and different frequency from the true value of the signal (\ref{fig:imu_noise}).
+To visualise the \textit{Noise Model}, let's take a true unit signal as show in Figure \ref{fig:imu_noise}. \textbf{Bias} can be defined as constant offset from true signal value. White noise can be thought of as random fluctuations of equal intensity and different frequency from the true value of the signal (\ref{fig:imu_noise}).
 
 \begin{figure}[H]
   \begin{subfigure}{\linewidth}
@@ -207,15 +199,16 @@ For both gyroscope and accelerometer the signal can be independently modeled thi
 To get orientation from the gyroscope, the readings need to be integrated once and the global orientation needs to be updated. Doing this continuously with the noisy signal will result ill result in erroneous orientation tracking and ultimately in a drift of the absolute rotation even if the device is stationary. Hence methods are needed to estimate the sensor errors, especially the bias. In table \ref{tab:imu_error_char} you can see all the errors and effect of those on orientation measurement.
 
 \subsubsection{Accelerometer Error Characteristics}
-Generating position information from accelerometer is not a single step like in case of Gyroscope. Based the strap-down inertial navigation algorithm shown in figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to be projected onto the global navigation frame using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
+Generating position information from accelerometer is not a single step like in case of Gyroscope. Based the strap-down inertial navigation algorithm shown in Figure \ref{fig:strapdown_imu} there are multiple steps involved. First, the accelerometer readings need to be projected onto the global navigation frame using the orientation calculated from gyroscope. Then, the accelerometer reading needs to be corrected for gravity. After that we double integrate the signal based on initial velocity and initial position to finally get the position.
 
 So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:imu_error_char} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
 % imu error table
 \begin{table}[H]
 \centering
-\begin{tabular}{ l| L| L }
-     Error Type & Description & Result of Single/Double Integration \\ 
+\begin{tabular}{| l| L| L |}
+     \hline
+     \textbf{Error type} & \textbf{Description} & \textbf{Result of single/double integration} \\ 
      \hline
      Gyroscope bias & 
      A constant bias $ \epsilon $ & 
@@ -235,6 +228,8 @@ So, there is double integration present in the algorithm. We also have a noisy s
      White noise with some standard deviation $ \sigma $ & 
      A second order random walk. The standard deviation of the position error grows as
      \[\sigma_s(t) = \sigma  t^{\frac{3}{2}}  \sqrt{\frac{\sigma  t}{3}}\]   \\
+
+     \hline
      
 \end{tabular}
     \caption{Summary of IMU error sources \citep{woodman2007introduction}}
@@ -246,6 +241,7 @@ For the reasons mentioned in the previous sections, it is not straightforward to
 
 % Start: Pose Estimation
 \section{Pose Estimation using IMU}
+\label{sec:pose_estimation_imu}
 Based on the strap-down inertial navigation algorithm (Section \ref{fig:strapdown_imu}) and Newtonian mechanics, pose can be estimated from the IMU readings using equation \ref{eqn:ori_imu_readings} and equation \ref{eqn:pos_imu_readings}. We need a history of pose for the iterative pose estimation to work. $ \omega $ and $ a $ are the gyroscope and accelerometer readings respectively as defined in section \ref{sec:imu}.
 
 \begin{equation}
@@ -290,10 +286,11 @@ With the advancement of neural networks and their ability to outperform classica
 
 
 \section{Neural Network Architectures}
+\label{sec:neural_network}
 The evolution of neural networks and deep learning techniques over the past decade has made the use data driven approaches very common. Data driven approaches have surpassed classical techniques in many applications. There are various neural network architectures, their variations and combinations present today. Each of these architectures have properties that aid in achieving solutions for various challenges.
 
 \subsection{Multi Layer Perceptron (MLP)}
-MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural Networks (DNNs) and are made of a combination of perceptrons/ neurons (figure \ref{fig:perceptron}). An MLP has at-least three layers; an input-layer, a hidden layer and an output-layer as shown in figure \ref{fig:mlp}. During the training phase the weights of the network are adapted using back-propagation (\citep{rumelhart1986learning}) to minimize a target loss function (gradient descent). These networks act as universal function approximators \citep{cybenko1989approximation} and therefore are used to create mathematical models by regression analysis. We will be using MLPs as Fully Connected (FC) layers in all of our networks for this purpose.
+MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural Networks (DNNs) and are made of a combination of perceptrons/ neurons (Figure \ref{fig:perceptron}). An MLP has at-least three layers; an input-layer, a hidden layer and an output-layer as shown in Figure \ref{fig:mlp}. During the training phase the weights of the network are adapted using back-propagation (\citep{rumelhart1986learning}) to minimize a target loss function (gradient descent). These networks act as universal function approximators \citep{cybenko1989approximation} and therefore are used to create mathematical models by regression analysis. We will be using MLPs as Fully Connected (FC) layers in all of our networks for this purpose.
 
 \begin{figure}[H]
     \centering
@@ -304,47 +301,40 @@ MLPs are the simplest form of Artificial Neural Networks (ANNs) or Deep Neural N
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.7]{images/fig_chapter2/nns/mlp.pdf}
+    \includegraphics[scale=0.6]{images/fig_chapter2/nns/mlp.pdf}
     \caption{Multi Layer Perceptron}
     \label{fig:mlp}
 \end{figure}
 
 \subsection{Convolutional Neural Networks (CNNs)}
-CNNs are another class of ANNs and are responsible for revolutionising the field computer vision and has applications in Natural Language Processing, Recommender Engines and Time Series as well. These networks also have neurons that optimise through learning \citep{cnn2015introduction}. These networks are capable of learning multiple features from the data by abstracting the data into feature maps. In our case we input a 6 channel (3-accelerometer and 3-gyroscope) data and then the CNNs take the data from 6 channels to 64 channels (tensor maps). Then these features are fed into the Fully Connected Layers (FC / MLP) at the end to regress the pose as shown in figure \ref{fig:cnn_fc}. This also results in reducing dimensionality of the data while regressing the output. 
+CNNs are another class of ANNs and are responsible for revolutionising the field computer vision and has applications in Natural Language Processing, Recommender Engines and Time Series as well. These networks also have neurons that optimise through learning \citep{cnn2015introduction}. These networks are capable of learning multiple features from the data by abstracting the data into feature maps. In our case we input a 6 channel (3-accelerometer and 3-gyroscope) data and then the CNNs take the data from 6 channels to 64 channels (tensor maps). Then these features are fed into the Fully Connected Layers (FC / MLP) at the end to regress the pose as shown in Figure \ref{fig:cnn_fc}. This also results in reducing dimensionality of the data while regressing the output. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{images/fig_chapter2/nns/cnn_mlp.png}
+    \includegraphics[scale=0.55]{images/fig_chapter2/nns/cnn_mlp.pdf}
     \caption{CNN layers with FC layers}
     \label{fig:cnn_fc}
 \end{figure}
 
 \subsection{Transformers}
-Transformer architecture as shown in figure \ref{fig:transformer_arch} is one of the latest proposed neural network architectures that has outperformed its predecessors. Its use mainly started for natural language processing \citep{vaswani2017attention} but was also adopted for computer vision \citep{dosovitskiy2020image}. The use of transformers is also extended for Inertial based Human Activity Recognition (HAR) \cite{shavit2021boosting} and Inertial Navigation \citep{rao2022ctin}. This architecture adopts Multi Headed Attention Mechanism (MHA) \citep{vaswani2017attention} which results in weighing the significance of each part of input data. This significantly improves performance of the network as it learns the importance of each feature and can look at the bigger picture from the data.
+Transformer architecture as shown in Figure \ref{fig:transformer_arch} is one of the latest proposed neural network architectures that has outperformed its predecessors. Its use mainly started for natural language processing \citep{vaswani2017attention} but was also adopted for computer vision \citep{dosovitskiy2020image}. The use of transformers is also extended for Inertial based Human Activity Recognition (HAR) \cite{shavit2021boosting} and Inertial Navigation \citep{rao2022ctin}. This architecture adopts Multi Headed Attention Mechanism (MHA) \citep{vaswani2017attention} which results in weighing the significance of each part of input data. This significantly improves performance of the network as it learns the importance of each feature and can look at the bigger picture from the data.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{images/fig_chapter2/nns/transformer_arch.png}
-    \caption{Transformer Architecture}
+    \includegraphics[scale=1]{images/fig_chapter2/nns/transformer_arch.pdf}
+    \caption{Transformer architecture}
     \label{fig:transformer_arch}
 \end{figure}
 
+Combining various neural network architectures is also a common practice among researchers \citep{deep_opti_stab} \citep{rao2022ctin}. A combination of 1D - convolutional neural network and transformer encoder and MLP is used for this research as shown in Figure \ref{fig:transformer_cnn}.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{images/fig_chapter2/nns/mha_img_original.png}
-    \caption{Multi Headed Attention}
-    \label{fig:mha}
+    \includegraphics[scale=0.7]{images/fig_chapter2/nns/transformer_cnn.pdf}
+    \caption{CNN-Transformer}
+    \label{fig:transformer_cnn}
 \end{figure}
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[scale=0.7]{images/fig_chapter2/nns/transformer_cnn.pdf}
-%     \caption{CNN-Transformer}
-%     \label{fig:transformer_cnn}
-% \end{figure}
-
-
-In this chapter, we discussed the steps, techniques and algorithms involved in building image stabilisation pipeline. We explained the reasons for choosing particular algorithms such as using digital image stabilisation, the preference of IMU for pose estimation and the use of neural networks instead of classical techniques. After developing this foundation, in the next chapter we will explore state of the art methods and examine how they can be used and inspire our work.
-
-we discussed different methods for image stabilization, challenges of pose-estimation and which methods are available to estimate pose from MEMS IMUs. The next chapter summaries some state of the art techniques used to solve the challenges we are facing.
+\subsubsection{Chapter Summary}
+In this chapter, we discussed the steps, techniques and algorithms involved in building the proposed video stabilisation pipeline. The reasons for choosing digital video stabilization and IMUs for motion estimation were also discussed. The reasoning behind the use of modern neural network based pose estimation algorithms instead of classical ones was explained. After developing this foundation, in the next chapter we will explore state of the art methods and examine how they can be used and inspire our work.
 
