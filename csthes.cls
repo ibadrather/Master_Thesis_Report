@@ -198,8 +198,9 @@
 \newcommand*{\dateprefix@en}{Draft of}
 \newcommand*{\facultyat@en}{at}
 \newcommand*{\faculty@en}{
-                        Mechatronics\\ 
                         Naturwissenschaftlich-Technische Fakult\"at \\
+                        Department of Electrical Engineering and Computer Science \\
+                        Mechatronics \\
                         and \\
                         Corporate Research and Technology (CRT), \\
                         Carl Zeiss AG, Jena \\ 
