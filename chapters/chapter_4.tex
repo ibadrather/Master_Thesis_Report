@@ -1,20 +1,16 @@
 \chapter{Digital Video Stabilization using IMUs} \label{chapter_four}
 
-In the past chapters, the challenges associated and methods available were discussed. This chapter contains the process we used to digitally stabilize video for our use-case. This chapter now proposed methods to digitally stabilize videos with large focal lengths using inertial data for pose estimation alone. Figure \ref{fig:dis_pipeline} depicts a general flowchart of the the developed pipeline.
+In the past chapters, the challenges associated with digital video stabilization using IMUs and methods available to overcome them were discussed. This chapter contains all the steps used to develop our pipeline. Figure \ref{fig:dis_pipeline} depicts a flowchart of the the developed video stabilization pipeline. 
 
-% \begin{sidewaysfigure}
-%     \centering
-%     \includegraphics[scale=0.9]{images/fig_chapter4/dis_pipleline.pdf}
-%     \caption{DIS pipeline using IMU Sensor}
-%     \label{fig:dis_pipeline}
-% \end{sidewaysfigure}
+In section \ref{sec:data_collection} the process of data collection is discussed along with its analysis. The section also describes how the simulated data was collected based on this analysis. In section \ref{sec:data_structure} the structure of data for purposes of training and stabilization is evaluated. Section \ref{sec:train_evaluate} covers the training and evaluation of various neural network architectures along with the data augmentation techniques. It also discusses the importance of smoothing the neural network outputs to further improve the stabilization. Lastly, in section \ref{sec:model_deployment} model deployment strategy and methods to decrease model inference latency are examined.
 
 \begin{figure}[H]
     % \centering
-    \includegraphics[scale=0.65]{images/fig_chapter4/dis_pipleline.pdf}
+    \includegraphics[scale=0.64]{images/fig_chapter4/dis_pipleline.pdf}
     \caption{Flowchart of a DVS pipeline using a IMU for pose estimation}
     \label{fig:dis_pipeline}
 \end{figure}
+
 
 In this work, an IMU sensor will be used for camera pose estimation that is a prerequisite for video stabilization. Based on the accuracy requirements for the camera pose estimation algorithm a data-driven neural network approach will be used, as classical signal processing combined with filtering failed to provide the required accuracy over longer periods of time due to severe drift. To be able to train the models to the required accuracy, a combination of simulated and real data is used. To capture the video we are using a GoPro Hero 10 which provides synchronised image and sensor data capture. The factory wide FoV lens was swapped to a low field of view lens having a large focal length (depicted in Figure \ref{fig:mod_gopro_hero10}). The simulation was build using Unreal Engine 4 and Microsoft AirSim. Table \ref{tab:technical_details} shows the technical specifications of the camera setup. For simulation similar camera parameters were used.
 
@@ -55,11 +51,12 @@ In this work, an IMU sensor will be used for camera pose estimation that is a pr
 
 
 \section{Data Collection}
+\label{sec:data_collection}
 Collecting enough data for any data driven learning approach is cumbersome and sometimes an iterative process. The data or training data in this case are the readings coming from the IMU sensor and the target (ground truth) being the camera pose (position and orientation). Real data was collected by mounting the camera on a rig which had vibrations associated with it on movement (Figure \ref{fig:camera_rig}). We made sure that the data depicts real life scenarios by moving the rig around in many different ways and let it vibrate and collect the data. The ground truth camera and IMU poses as well as all calibration parameters like camera intrinsics, IMU parameters and transformations between the sensor coordinate frames were generated using proprietary Zeiss software and is beyond the scope of this work.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.8]{images/fig_chapter4/camera_rig.pdf}
+    \includegraphics[scale=0.65]{images/fig_chapter4/camera_rig.pdf}
     \caption{Camera setup}
     \label{fig:camera_rig}
 \end{figure}
@@ -118,12 +115,7 @@ Apart from the IMU noise characteristics the vibrations from the real ground tru
   \end{aligned}
 \end{equation}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{images/fig_chapter4/vib_damped.pdf}
-    \caption{Damped vibration in one axis}
-    \label{fig:damped_vib}
-\end{figure}
+
 
 %% Displacement distribution
 \begin{figure}[H]
@@ -176,6 +168,13 @@ Apart from the IMU noise characteristics the vibrations from the real ground tru
 
 \caption{Real rotational vibration data statistical analysis}
 \label{fig:dist_rot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{images/fig_chapter4/vib_damped.pdf}
+    \caption{Damped vibration in one axis}
+    \label{fig:damped_vib}
 \end{figure}
 
 
@@ -299,8 +298,28 @@ The amplitude $ A $ of the translational displacements is the most important cha
 \label{sec:gen_sim_data}
 The simulated data plays a very important role in our approach as we use the ideal data to validate our stabilization approach. It also empowers us to simulate IMU sensors with different noise levels and characteristics. We also made sure that the data generated from the simulation is fairly domain randomized to make it realistic. 
 
-Simulated data is based on the analysed real data with vibration characteristics taken from table \ref{tab:real_data_analysis_displacement} and table \ref{tab:real_data_analysis_rotation}. The data is then generated using the equations \ref{eqn:vib_disp} and \ref{eqn:vib_rot}. A total of 400 vibration sequences with an average vibration duration of 10 seconds were generated with characteristics shown in tables \ref{tab:real_data_analysis_displacement} and \ref{tab:real_data_analysis_rotation}. Generating a large number of samples ensures the sampling of diverse data from the distribution. This is where we benefit from our simulation the most as the diversity and the size of data ensures our neural network generalizes well.
+Simulated data is based on the analysed real data with vibration characteristics taken from table \ref{tab:real_data_analysis_displacement} and table \ref{tab:real_data_analysis_rotation}. The data is then generated using the equations \ref{eqn:vib_disp_acc} and \ref{eqn:vib_disp_gyro} where \textbf{$ k $} is amplitude, \textbf{$ \omega $} is the frequency, \textbf{$ \tau $} is the time constant and \textbf{$ t $} represents the time-step. A total of 300 vibration sequences with an average vibration duration of 10 seconds were generated with characteristics shown in tables \ref{tab:real_data_analysis_displacement} and \ref{tab:real_data_analysis_rotation}. 
 
+\begin{equation}
+  \label{eqn:vib_disp_acc}
+  \begin{aligned}
+    accel(t) = -k \omega^2 e^{-t / \tau} sin(\omega t)
+        - 2k \omega e^{-t / \tau} \frac{cos(\omega t)}{\tau}
+        + k e^{-t / \tau} \frac{sin(t \omega)}{\tau^2}
+         \\
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \label{eqn:vib_disp_gyro}
+  \begin{aligned}
+    gyro(t) = k \omega e^{-t / \tau} cos(\omega t )
+        - k  e^{-t / \tau} \frac{sin(\omega t)}{\tau}
+         \\
+  \end{aligned}
+\end{equation}
+
+For different vibration sequences, these vibration characteristics were randomly sampled from the distributions. Generating a large number of samples ensures the sampling of diverse data from the distribution. This is where we benefit from our simulation the most as the diversity and the size of data ensures our neural network generalizes well. 
 
 \section{Structuring of Data}
 \label{sec:data_structure}
@@ -328,8 +347,32 @@ In a supervised learning setting, neural networks require a sufficient amount of
 \label{fig:imu_window_samples}
 \end{figure}
 
-\section{Training and Testing of Various Neural Networks}
-Various neural network architectures were trained and tested to accurately estimate the camera pose with respect to a stabilized trajectory. The input to the neural network is a window of sensor readings coming from an IMU and the network is trained against the deviation with respect to the stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in Figure \ref{fig:stab_traj_ideal}. 
+
+
+% rotation data distribution table
+\begin{table}[H]
+    \centering
+\begin{tabular}{|c|L|}
+\hline
+\textbf{Window size} & \textbf{Average trajectory error (mm)} \\
+\hline
+
+6 & - \\
+20 & - \\
+65 & - \\
+100 & - \\
+143 & - \\
+200 & - \\
+\hline
+\end{tabular}
+    \caption{Evaluation of different window sizes using ResNet}
+    \label{tab:window_size_eval}
+\end{table}
+
+
+\section{Training and Evaluation of Various Neural Networks}
+\label{sec:train_evaluate}
+Various neural network architectures were trained and evaluated to accurately estimate the camera pose with respect to a stabilized trajectory. The input to the neural network is a window of sensor readings coming from an IMU and the network is trained against the deviation with respect to the stabilization trajectory. The stabilization trajectory can be realised as a mean of the vibration displacement (linear/angular) for an ideal case as shown in Figure \ref{fig:stab_traj_ideal}. 
 
 \begin{figure}
     \centering
@@ -343,7 +386,27 @@ Let the variable window size be \textbf{W}. Then based on the employed sensor da
 Various neural network architectures like CNN, MLP, LSTM, ResNet, Transformers and their variations were trained and tested for stabilization trajectory regression. Out of these CNN, ResNet and Transformer architectures had acceptable performance. 
 
 \subsection{Data Augmentation}
-The simulated data is augmented with modified noise and bias characteristics from table \ref{tab:imu_noise_characteristics}. On each training step randomly generated bias and white noise is added to the true IMU window samples. This results in the network learning to compensate for white noise and bias for a wide variety of noise characteristics as shown by the decrease of average trajectory error by 5 percent.
+The simulated data is augmented with modified noise and bias characteristics from table \ref{tab:imu_noise_characteristics}. On each training step randomly generated bias and white noise is added to the true IMU window samples as shown in Figure \ref{fig:data_augmentation}. This results in the network learning to compensate for white noise and bias for a wide variety of noise characteristics as shown by the decrease in average trajectory error. 
+
+
+\begin{figure}[H]
+    %%
+    \begin{subfigure}{\linewidth}
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_0.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_1.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_2.pdf}\hfill
+    \end{subfigure}\par\medskip
+    
+    %%
+    \begin{subfigure}{\linewidth}
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_3.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_4.pdf}\hfill
+    \includegraphics[width=.3\linewidth]{images/fig_chapter4/imu_windows/same_window_diff_noise_5.pdf}\hfill
+    \end{subfigure}
+\caption{Data augmentation: Same IMU window with different noise}
+\label{fig:data_augmentation}
+\end{figure}
+
 
 \subsection{Training Setting}
 The training dataset consists of 400 samples of length 10 seconds each. Which means a total of more than 5000 IMU windows \textit{W} of size (6, 143) are available for training, validation and testing the network. The training, validation and testing had a split of 80:15:5. The network was trained using the Adam optimizer with an initial learning rate of 1x$ 10^{-5} $ and a learning rate scheduler. Initial learning rate was estimated with PyTorch-Lighting and optimized using grid search. Mean Squared Error (MSE) proved to be the best loss function for this use case and is also used by other data driven pose estimation algorithms \citep{yan2018ridi}, \citep{herath2020ronin}.
@@ -352,21 +415,21 @@ The training dataset consists of 400 samples of length 10 seconds each. Which me
 
 %% CNN
 \subsection{Convolutional Neural Network}
-A convolutional neural network with six stacked Conv1D layers each with batch normalization and ReLU activations is used to extract features from the input data as shown in Figure \ref{fig:cnn_used}. Then the output of these convolution layers is regularized during training using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{MLP} layers.
+A convolutional neural network with eight stacked \textbf{Conv1D} layers each with \textbf{batch normalization} and \textbf{ReLU} activations is used to extract features from the input data as shown in Figure \ref{fig:cnn_used}. Then the output of these convolution layers is regularized during training using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of three fully connected \textbf{MLP} layers with two ReLU activations between them.
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.75]{images/fig_chapter2/nns/cnn_mt.pdf}
+    \includegraphics[scale=0.85]{images/fig_chapter2/nns/cnn_mt.pdf}
     \caption{Convolutional Neural Network used}
     \label{fig:cnn_used}
 \end{figure}
 
 \subsubsection{Model Output Analysis}
-Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds long video with translational vibrations in 3 axis (x,y,z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction too far off and not smooth enough which will case jitter in the stabilization. The error in all axis is depicted in Figure \ref{fig:cnn_error}.
+Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds long video with translational vibrations in 3 axis (x,y,z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction too far off and not smooth enough which will cause jitter in the stabilization. The error in all axis is depicted in Figure \ref{fig:cnn_error}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.53]{images/fig_chapter4/nn_related/predicted_vs_ground_truth_cnn.pdf}
+    \includegraphics[scale=0.6]{images/fig_chapter4/nn_related/predicted_vs_ground_truth_cnn.pdf}
     \caption{Model prediction vs ground truth for CNN}
     \label{fig:cnn_op_vs_gt}
 \end{figure}
@@ -380,14 +443,14 @@ Figure \ref{fig:cnn_op_vs_gt} shows the model output vs ground truth plot for a 
 
 %% ResNet
 \subsection{ResNet}
-Convolution neural network having \textbf{Residual Skip Connections} with six \textbf{1D - Convolutional} Layers in sequence with \textbf{Batch Normalisation} and  \textbf{ReLU} activation is used to extract features from the input data. Then the output of these convolution layers is regularized using \textbf{dropout} and down-sampled using \textbf{Max-pooling}. Finally, pose is regressed using a series of two fully connected \textbf{Linear} layers. 
+Convolution neural network with block having a Conv1D layer in sequence with batch normalization and ReLU activation and Max Pooling layer for dimensionality reduction. The output from this input block goes in a sequence of four residual blocks having residual skip connection. Each block has two Conv1D layers along with Batch normalisation and ReLU activations as shown in Figure \ref{fig:resnet_used}. The output from these residual blocks then goes into the output block which has three linear layers along with two ReLU activations.
 
 \subsubsection{Model Output Analysis}
 Figure \ref{fig:resnet_op_vs_gt} shows the model output vs ground truth plot for a 27 seconds video three linear DoF (x, y, z). The model can regress stabilization trajectory based on input IMU readings with good precision but there are zones where the prediction is off and thus causes jitter in stabilization. The error in all DoF can be seen in Figure \ref{fig:resnet_error}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{images/fig_chapter2/nns/resnet_mt.pdf}
+    \includegraphics[scale=0.6]{images/fig_chapter2/nns/resnet_mt.pdf}
     \caption{CNN with residual skip connections (ResNet)}
     \label{fig:resnet_used}
 \end{figure}
@@ -435,6 +498,24 @@ Figure \ref{fig:cnn_trans_op_vs_gt} shows the model output vs ground truth plot 
     \label{fig:cnn_trans_error}
 \end{figure}
 
+\subsection{Model Comparison}
+Average trajectory error between the estimated and the ground truth trajectory acts as a metric to evaluate and compare different networks. Both Transformer and ResNet networks outperform the convolutional neural network with transformer network having the best performance. The videos stabilized using the prior networks have very good visual quality throughout the video duration as they are able to accurately estimate the stabilization trajectory.  The average trajectory error comparisons are in table \ref{tab:model_comparison}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+        \textbf{Model Architecture} & \textbf{Average trajectory error (mm)} \\
+    \hline
+        CNN & - \\
+        ResNet & - \\
+        Transformer & - \\
+    \hline
+    \end{tabular}
+    \caption{Average trajectory error comparison for different neural networks}
+    \label{tab:model_comparison}
+\end{table}
+
 \subsection{Smoothing of Stabilization Trajectory}
 The neural network is able to regress the stabilization trajectory accurately with the required precision. But the regressed trajectory is not smooth as show in Figure \ref{fig:rough_mo_smooth_gt} and has sharp peaks and sudden changes. This is not acceptable as these rough peaks cause jitter in the stabilized video. To account for this, we implemented \textit{Trajectory-Smoothening} in our digital image stabilization pipeline as shown in Figure \ref{fig:dis_smooth_pipeline}. An \textbf{Exponential Moving Average Filter} (Equation \ref{eqn:emaf}) is implemented to smooth the trajectory and minimise jitter. Figure \ref{fig:rough_mo_smooth_mo} shows the effect of this filter on the model output.
 
@@ -462,7 +543,7 @@ Where $ y_t $ is the smoothed signal and $ y_{t-1} $ is the smoothed signal at p
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.78]{images/fig_chapter4/dis_smooth_pipeline.pdf}
+    \includegraphics[scale=0.55]{images/fig_chapter4/dis_smooth_pipeline.pdf}
     \caption{DIS pipeline with trajectory smoothing}
     \label{fig:dis_smooth_pipeline}
 \end{figure}
@@ -524,6 +605,7 @@ Where $ y_t $ is the smoothed signal and $ y_{t-1} $ is the smoothed signal at p
 
 
 \section{Model Deployment}
+\label{sec:model_deployment}
 Figure \ref{fig:dis_smooth_pipeline} shows the digital image stabilization pipeline and our goal is to minimise the time taken at each step. The video (images) are coming at 60 FPS from the camera that has 4K resolution (3840x2160 pixels). We ideally have 1/60 seconds (16.67 ms) to complete all the steps of the DIS pipeline. In this pipeline, model inference and stabilization grid calculation take most of the given time. Stabilization grid calculation is a series of matrix multiplications and has been already optimized. Thus, low inference latency is highly desirable.
 
 \subsection{Decreasing model inference latency}
@@ -593,6 +675,7 @@ Various trained models (CNN, ResNet and Transformer) are checked for inference l
 \end{table} %%%%
 
 
-This chapter contained all the steps we took and the techniques we used to successfully realise digital image stabilization without incorporating any image observations into the algorithm but rather fully relying on inertial measurement data. Various neural network architectures for pose estimation were examined. Throughout the experiments transformer networks outperformed standard CNN architectures for this task. The importance of post-processing the neural network output with a moving average filter to smooth out the jitter was also discussed. In the end a run-time analysis of each architecture was performed that showed that the latency  requirements were met.
+\subsubsection{Summary}
+This chapter contained all the steps taken and the techniques used to successfully realise digital video stabilization without incorporating any image observations into the algorithm but rather fully relying on inertial measurement data. Various neural network architectures for pose estimation were examined. Throughout the experiments, transformer networks outperformed standard CNN architectures for this task. The importance of post-processing the neural network output with a exponential moving average filter to smooth out the jitter was also discussed. In the end, a run-time analysis of each architecture was performed that showed that the latency requirements were met. The next chapter contains a brief description of all the methods that were employed to realise the video stabilization. It also discusses further work that can be done to improve this algorithm and extend its application.
 
 

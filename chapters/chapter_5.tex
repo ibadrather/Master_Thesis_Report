@@ -1,19 +1,22 @@
-\chapter{Results and Discussion} \label{chapter_five}
+\chapter{Conclusion} \label{chapter_five}
 
-We had a camera with a small FOV high focal length lens which kept vibrating after its rig was subjected to movement. The vibrations were very small, with an average translational displacement of around 2mm. This caused huge pixel shifts which deteriorated the quality of video recordings. Our goal was to stabilize the video so that there is no visual discomfort for the viewer and the quality of the scene is preserved.
-    
-Digital Image stabilization was chosen to stabilize the video for our use case as hardware stabilization is expensive and bulky with many moving parts. An MEMS IMU was chosen for camera motion estimation due to its low price and high reliability. However, the use of MEMS IMUs presents a huge challenge in accurate pose estimation as the noise characteristics of IMU, along with the use of classical inertial navigation algorithm, makes it impossible to accurately estimate pose. The use of advanced state estimation algorithms was also futile.
+In this work, a novel video stabilization algorithm was developed that uses IMU data for camera motion estimation using neural networks. The videos were captured from a modified GoPro Hero 10 with a low field-of-view and high focal length lens. The camera had oscillations associated with it resulting in deterioration of video quality and visual discomfort for the viewer.
 
-Data-driven approaches like RoNIN(CNN and ResNet) were tested to estimate camera pose accurately and showed more promising results than classical approaches. More advanced attention based neural network architectures were used (CNN-Transformer) which significantly improved the accuracy of stabilization trajectory estimation. Both real world and simulated data was collected to train the neural networks and test the image stabilization algorithm.
+The video was digitally stabilized in real-time using only IMU data for camera motion estimation. Pose estimation with IMUs using classical algorithms was not feasible as the estimated pose drifts from the actual trajectory due to the noise present in IMU readings. This drift renders the video stabilization algorithm useless.
 
-All these steps resulted into good quality IMU based digital video stabilization. The networks were able to accurately estimate the stabilization trajectory (camera pose) and did not suffer from drift. However, outputs from the neural networks were not smooth and caused some jitter in the stabilized video. Thus, exponential moving average filter was used on the outputs to smooth out the predicted trajectory and further improve the quality of video stabilization.
+To eliminate drift and estimate the pose with high accuracy, data driven approaches were evaluated. They outperformed their classical predecessors and proved insusceptible to drift. Various neural network architectures were trained and evaluated for this purpose. Transformer networks proved to have the best performance for this use case as they had significantly lower error in stabilization trajectory estimation.
+
+To train and evaluate these neural networks a huge amount of data is required. Thus, both real and simulated data was generated. Simulated data was generated based on camera oscillation characteristics. This allowed for easy generation of huge amount of data for training. Another benefit that the simulated data provided was that it was augmented with different IMU noise characteristics that make the neural networks robust towards noise and generalize well.
+
+The output from the neural networks had sharp fluctuations and an exponential moving average filter was used to smooth it out which resulted in minimising the jitter and further improving the video stabilization quality. Finally, the run-time analysis of the deployed models was done to make sure the inference latency is in the allowed range.
+
+The developed video stabilization algorithm was successful and generated highly accurate results. The stabilized videos are of good quality and suffered from minimal loss of visual content. 
 
 \subsubsection{Future Work}
-\begin{itemize}
-    \item Adapt this stabilization technique to high field of view and low focal length camera setups.
+Although the developed image stabilization algorithm performs well, there are certain areas which require improvement. 
 
-    \item Explore lean neural network architectures to obtain similar results with low latency networks that are deploy-able on cheaper hardware.
+The algorithm currently only works at microscopic levels and needs to be adapted for high field of view and low focal length camera setups. This will require many changes in the warping grid estimation for stabilization. Current warping grid estimation requires depth to scene distance and this information is difficult to obtain in high field-of-view camera setups. The depth to scene information may be estimated using modern neural network based computer vision techniques or by using range finder sensors like LiDAR which comes installed with high end mobile devices.
 
-    \item Figure out way to use semi-supervised or unsupervised learning techniques to eliminate the hassle of ground truth generation.
-    
-\end{itemize}
+The algorithm requires huge amount of data for training and evaluation and generating good data is a very expensive and time consuming process. To overcome this, semi-supervised or unsupervised learning techniques can be explored.
+
+The developed pose estimation algorithm is accurate and can be further adapted for pose estimation in robotics and virtual reality. The transformer network performance is great and can yield good results for absolute pose estimation using only IMUs which is a huge challenge in the fields of robotics and virtual reality.

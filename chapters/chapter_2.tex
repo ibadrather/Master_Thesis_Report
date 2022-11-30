@@ -203,6 +203,9 @@ Generating position information from accelerometer is not a single step like in 
 
 So, there is double integration present in the algorithm. We also have a noisy signal, so, the noise also gets integrated two times. This can result into very inaccurate position estimations and is one of the most challenging parts of working with an IMU. In table \ref{tab:imu_error_char} you can see all errors in an MEMS accelerometer and effect of those on position measurement.
 
+\subsubsection{Challenges in Working with IMUs}
+For the reasons mentioned in the previous sections, it is not straightforward to work with IMUs, especially for absolute position estimation as the errors introduced are squared with time. This results in a \textbf{drift} from actual position, which for any image stabilization algorithm is very detrimental. Orientation estimation is still relatively reliable over short periods of time and is the main reason why gyroscope based hardware as well as digital video stabilization is more common.
+
 % imu error table
 \begin{table}[H]
 \centering
@@ -236,8 +239,7 @@ So, there is double integration present in the algorithm. We also have a noisy s
     \label{tab:imu_error_char}
 \end{table}
 
-\subsubsection{Challenges in Working with IMUs}
-For the reasons mentioned in the previous sections, it is not straightforward to work with IMUs, especially for absolute position estimation as the errors introduced are squared with time. This results in a \textbf{drift} from actual position, which for any image stabilization algorithm is very detrimental. Orientation estimation is still relatively reliable over short periods of time and is the main reason why gyroscope based hardware as well as digital video stabilization is more common.
+
 
 % Start: Pose Estimation
 \section{Pose Estimation using IMU}
@@ -326,7 +328,7 @@ Transformer architecture as shown in Figure \ref{fig:transformer_arch} is one of
     \label{fig:transformer_arch}
 \end{figure}
 
-Combining various neural network architectures is also a common practice among researchers \citep{deep_opti_stab} \citep{rao2022ctin}. A combination of 1D - convolutional neural network and transformer encoder and MLP is used for this research as shown in Figure \ref{fig:transformer_cnn}.
+Combining various neural network architectures is also a common practice among researchers \citep{deep_opti_stab} \citep{rao2022ctin}. A combination of 1D - convolutional neural network, transformer encoder and MLP is used for this research as shown in Figure \ref{fig:transformer_cnn}.
 
 \begin{figure}[H]
     \centering
@@ -335,6 +337,7 @@ Combining various neural network architectures is also a common practice among r
     \label{fig:transformer_cnn}
 \end{figure}
 
-\subsubsection{Chapter Summary}
-In this chapter, we discussed the steps, techniques and algorithms involved in building the proposed video stabilisation pipeline. The reasons for choosing digital video stabilization and IMUs for motion estimation were also discussed. The reasoning behind the use of modern neural network based pose estimation algorithms instead of classical ones was explained. After developing this foundation, in the next chapter we will explore state of the art methods and examine how they can be used and inspire our work.
+\subsubsection{Summary}
+In this chapter, we discussed various techniques and algorithms that can be used to build a video stabilization pipeline. Based on the scope of our work and challenges to overcome, digital video stabilization was chosen. Camera motion estimation for stabilization will be achieved by using neural networks with IMU sensor data. Noise models were also established as that helps us in making neural networks robust and generalize well by doing data augmentation. In the next chapter we will discuss some of the state-of-the-art methods for video stabilization and pose estimation.
+
 

@@ -1,6 +1,6 @@
 \chapter{Literature Review} \label{chapter_three}
 
-Previous chapter laid out the foundations for video stabilization and motion estimation. We also made the case for the techniques and algorithms chosen in this work. Now, this chapter includes some of the state-of-the-art methods for digital video stabilization and pose estimation. 
+The previous chapter laid out the foundations for video stabilization and motion estimation. We also made the case for the techniques and algorithms chosen for this work. This chapter includes some of the state-of-the-art methods for digital video stabilization and pose estimation and how these methods influence our video stabilization pipeline.
 
 \section{Digital Video Stabilization}
 Various sensor based digital image stabilization techniques have been developed over the years using both classical and data-driven approaches. These techniques are limited to rotational motion compensation or using image data.
@@ -56,5 +56,6 @@ This combines both classical and learn-based approaches by using an Extended Kal
 This algorithm takes advantage of the recent advances in deep learning by using Multi-Headed-Attention (MHA) mechanism introduced in \citep{vaswani2017attention}. It uses a ResNet based encoder enhanced by local and global MHA to capture spatial contextual information from IMU measurements \citep{rao2022ctin}. CTIN is claimed to be robust and to outperform state-of-the-art models but cannot be evaluated as it is not available publicly.
 
 
+\subsubsection{Summary}
 
-
+This chapter covered some of the state-of-the-art methods for video stabilization and pose estimation. We also discussed the possible use of these methods for our use case and the results we achieved using some of them. In the next chapter, the developed video stabilization pipeline has been discussed in detail.
